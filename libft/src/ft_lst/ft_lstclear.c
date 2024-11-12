@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azinchen <azinchen@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/07 19:00:08 by azinchen          #+#    #+#             */
-/*   Updated: 2024/11/07 19:00:19 by azinchen         ###   ########.fr       */
+/*   Created: 2024/05/01 13:25:46 by azinchen          #+#    #+#             */
+/*   Updated: 2024/07/26 13:58:56 by azinchen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h> 
- 
-int main(int argc, char* argv[], char **envp) { 
-  while (*envp != NULL) { 
-    printf("%s\n", *envp++); 
-  } 
-  return 0; 
-} 
+#include "../../include/libft.h"
+
+void	ft_lstclear(t_list **lst, void (*del)(void *))
+{
+	t_list	*cur_list;
+
+	if (!*lst || !del)
+		return ;
+	while (*lst)
+	{
+		cur_list = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		*lst = cur_list;
+	}
+	*lst = NULL;
+}
