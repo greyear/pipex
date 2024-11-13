@@ -14,21 +14,20 @@
 #include <time.h>
 #include <string.h>
 
-/*
 int main(int argc, char* argv[], char *envp[])
 {
+	t_pipex	*p;
 	if (argc != 5)
 		args_number_error();
-	while (*envp != NULL)
-	{
-		printf("%s\n", *envp++); 
-	}
+
+	p = (t_pipex *)malloc(sizeof(t_pipex));
+	if (!p)
+		error(ERR_MALLOC);
 	return 0; 
 }
-*/
 
 //simulation of: "ping -c 5 google.com | grep rtt"
-
+/*
 int	main(int argc, char *argv[])
 {
 	int	fd[2];
@@ -66,4 +65,4 @@ int	main(int argc, char *argv[])
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
 	return (0);
-}
+}*/

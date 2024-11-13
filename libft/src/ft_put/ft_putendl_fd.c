@@ -12,18 +12,19 @@
 
 #include "../../include/libft.h"
 
-void	ft_putendl_fd(char *s, int fd)
+int	ft_putendl_fd(char *s, int fd)
 {
-	int	i;
-
-	if (s)
+	if (!s)
 	{
-		i = 0;
-		while (s[i] != '\0')
-		{
-			write(fd, &s[i], 1);
-			i++;
-		}
-		write(fd, "\n", 1);
+		if (write(fd, "(null)", 6) == -1)
+			return (-1);
 	}
+	else
+	{
+		if (write(fd, s, ft_strlen(s)) == -1)
+			return (-1);
+	}
+	if (write(fd, "\n", 1) == -1)
+		return (-1);
+	return (0);
 }
