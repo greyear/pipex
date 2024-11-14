@@ -32,10 +32,13 @@
 # define ERR_WAITPID "Waitpid function failed"
 # define ERR_CLOSE "Closing failed"
 
+# define EXIT_CMD_CANNOT_EXECUTE 126
+# define EXIT_CMD_NOT_FOUND 127
+
 typedef struct s_pipex
 {
 	pid_t	*pids;
-	char	*cmds;
+	char	**cmds;
 	int		fd[2];
 	int		is_path;
 	char	*path;

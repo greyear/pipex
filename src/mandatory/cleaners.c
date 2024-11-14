@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "pipex.h"
 
 void	clean_arr(char **arr)
 {
@@ -25,7 +25,12 @@ void	clean_arr(char **arr)
 	free(arr);
 }
 
-void	clean_struct(t_pipex *p)
+void	clean_struct(t_pipex **p)
 {
-	
+	if (!p || !*p)
+		return ;
+	clean_arr((*p)->cmds);
+
+	free(*p);
+	*p = NULL;
 }
