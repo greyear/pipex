@@ -16,12 +16,15 @@ NAME 			=	pipex
 # Directories
 LIBFT_DIR		= 	./libft
 SRC_DIR 		=	./src
+SRC_MAN_DIR		=	$(SRC_DIR)/mandatory
+SRC_BON_DIR		=	$(SRC_DIR)/bonus
 OBJ_DIR 		=	./obj
+OBJ_MAN_DIR 	=	$(OBJ_DIR)/mandatory
+OBJ_BON_DIR		=	$(OBJ_DIR)/bonus
 
 #Includes
 LIBFT_INC		=	$(LIBFT_DIR)/include
-INCLUDE 		=	./include/
-HEADERS			=	-I$(LIBFT_INC)/libft.h -I$(LIBFT_INC)/get_next_line.h -I$(MLX_INC)
+HEADERS 		=	-I$(LIBFT_INC)
 
 #Libraries
 LIBFT			=	$(LIBFT_DIR)/libft.a
@@ -33,43 +36,67 @@ CFLAGS 			=	-g -Wall -Wextra -Werror
 RM				=	rm -f
 
 # Source files
-READING_DIR			=	$(SRC_DIR)/reading/read_map.c
-TRANSFORMING_DIR	= 	$(SRC_DIR)/transforming/rotate.c
-DRAWING_DIR			=	$(SRC_DIR)/drawing/px_matrix.c
-SRC					=	$(READING_DIR) \
-						$(TRANSFORMING_DIR) \
-						$(DRAWING_DIR) \
-						$(SRC_DIR)/main.c
+MAN_SRC			=	main.c \
+					path.c \
+					errors.c
+BON_SRC			=	main_bonus.c \
+					path_bonus.c \
+					errors_bonus.c
+
+# Full paths to files
+MAN_SRC_FILES	=	$(addprefix $(SRC_MAN_DIR)/, $(MAN_SRC))
+BON_SRC_FILES	=	$(addprefix $(SRC_BON_DIR)/, $(BON_SRC))
 
 # Object files
-OBJ 			=	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
+MAN_OBJ 		=	$(addprefix $(OBJ_MAN_DIR)/, $(MAN_SRC:.c=.o))
+BON_OBJ			=	$(addprefix $(OBJ_BON_DIR)/, $(BON_SRC:.c=.o))
 
-#Build rules
+# Colors
+BLUE = \033[1;34m
+GREEN = \033[1;32m
+NC = \033[0m
+
+# Build rules
 all: 			$(NAME)
+				@echo "$(GREEN)--> Created pipex!$(NC)"
 
-$(LIBFT):
-				@make -C ./libft
+$(LIBFT):		@make -C $(LIBFT_DIR)
 
-$(NAME): 		$(OBJ) $(LIBFT)
-				$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME) 
+$(NAME): 		.mandatory
 
-$(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c
+.mandatory:		$(MAN_OBJ) $(LIBFT)
+				@$(CC) $(CFLAGS) $(MAN_OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME)
+				@$(RM) -r .bonus
+
+bonus:			.bonus
+				@echo "$(GREEN)--> Created pipex_bonus!$(NC)"
+
+.bonus:			$(BON_OBJ) $(LIBFT)
+				@$(CC) $(CFLAGS) $(BON_OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME)
+				@$(RM) -r .mandatory
+
+# Object file compilation
+$(OBJ_MAN_DIR)/%.o: $(SRC_MAN_DIR)/%.c
 				@mkdir -p $(@D)
-				@$(CC) $(CFLAGS) $(INCLUDE_DIR) -Imlx -c $< -o $@
+				@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
 
+$(OBJ_BON_DIR)/%.o: $(SRC_BON_DIR)/%.c
+				@mkdir -p $(@D)
+				@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
+
+# Cleaning rules
 clean:
 				@$(RM) -r $(OBJ_DIR)
 				@$(RM) .cache_exists
-				@make clean -C ./libft
+				@make clean -C $(LIBFT_DIR)
+				@echo "$(BLUE)*.o files removed!$(NC)"
 		
 fclean: 		clean 
 				@$(RM) $(NAME)
 				@$(RM) $(LIBFT)
+				@$(RM) -r .mandatory .bonus
+				@echo "$(BLUE)All files removed!$(NC)"
 			
 re: 			fclean all
 
-.PHONY: 		all clean fclean re
-
-BLUE = \033[1;34m
-GREEN = \033[1;32m
-NC = \033[0m
+.PHONY: 		all clean fclean re bonus
