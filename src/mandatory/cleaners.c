@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path.c                                             :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azinchen <azinchen@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 18:03:38 by azinchen          #+#    #+#             */
-/*   Updated: 2024/11/14 18:03:40 by azinchen         ###   ########.fr       */
+/*   Created: 2024/11/14 18:50:46 by azinchen          #+#    #+#             */
+/*   Updated: 2024/11/14 18:50:47 by azinchen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-int is_path_set(t_pipex *p, char *envp[])
+void	clean_arr(char **arr)
 {
 	int	i;
 
-	if (!envp)
-		return (0);
-	while (envp[i])
+	i = 0;
+	while (arr[i])
 	{
-		if (ft_strncmp("envp[i]", "PATH=", 5) == 0)
-			p->is_path = 1; //where to set value to 0?
+		free(arr[i]);
 		i++;
 	}
-	return (0);
+	free(arr);
+}
+
+void	clean_struct(t_pipex *p)
+{
+	
 }

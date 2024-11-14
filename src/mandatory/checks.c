@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path.c                                             :+:      :+:    :+:   */
+/*   checks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azinchen <azinchen@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 18:03:38 by azinchen          #+#    #+#             */
-/*   Updated: 2024/11/14 18:03:40 by azinchen         ###   ########.fr       */
+/*   Created: 2024/11/14 19:18:11 by azinchen          #+#    #+#             */
+/*   Updated: 2024/11/14 19:18:13 by azinchen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-int is_path_set(t_pipex *p, char *envp[])
+int check_first_file(char **argv, t_pipex *p)
 {
-	int	i;
+	if (access(argv[1], F_OK) == -1)
+		//file doesn't exist
+	if (access(argv[1], R_OK) == -1)
+		//no reading permission
+	
+}
 
-	if (!envp)
-		return (0);
-	while (envp[i])
-	{
-		if (ft_strncmp("envp[i]", "PATH=", 5) == 0)
-			p->is_path = 1; //where to set value to 0?
-		i++;
-	}
-	return (0);
+int check_second_file(int argc, char **argv, t_pipex *p)
+{
+	if (access(argv[argc - 1], F_OK) == -1)
+		//file doesn't exist
+	if (access(argv[argc - 1], W_OK) == -1)
+		//no writing permission
+
 }

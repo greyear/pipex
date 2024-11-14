@@ -38,7 +38,8 @@ RM				=	rm -f
 # Source files
 MAN_SRC			=	main.c \
 					path.c \
-					errors.c
+					errors.c \
+					cleaners.c
 BON_SRC			=	main_bonus.c \
 					path_bonus.c \
 					errors_bonus.c
