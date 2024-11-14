@@ -27,6 +27,8 @@ int main(int argc, char* argv[], char *envp[])
 }
 
 //simulation of: "ping -c 5 google.com | grep rtt"
+
+//cmd1 < file1 | cmd2 > file2
 //./pipex file1 cmd1 cmd2 file2
 /*
 int	main(int argc, char *argv[])
