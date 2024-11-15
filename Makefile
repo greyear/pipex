@@ -11,93 +11,94 @@
 # **************************************************************************** #
 
 # Standard
-NAME 			=	pipex
+NAME			=	pipex
 
 # Directories
 LIBFT_DIR		= 	./libft
-SRC_DIR 		=	./src
+SRC_DIR			=	./src
 SRC_MAN_DIR		=	$(SRC_DIR)/mandatory
 SRC_BON_DIR		=	$(SRC_DIR)/bonus
-OBJ_DIR 		=	./obj
+OBJ_DIR			=	./obj
 OBJ_MAN_DIR 	=	$(OBJ_DIR)/mandatory
 OBJ_BON_DIR		=	$(OBJ_DIR)/bonus
 
 #Includes
 LIBFT_INC		=	$(LIBFT_DIR)/include
-HEADERS 		=	-I$(LIBFT_INC)
+HEADERS			=	-I$(LIBFT_INC)
 
 #Libraries
 LIBFT			=	$(LIBFT_DIR)/libft.a
 LIB				=	-L$(LIBFT_DIR)
 
 # Compiler and compilation flags
-CC 				=	cc
-CFLAGS 			=	-g -Wall -Wextra -Werror
+CC				=	cc
+CFLAGS			=	-g -Wall -Wextra -Werror
 RM				=	rm -f
 
 # Source files
 MAN_SRC			=	main.c \
+					pipex.c \
 					path.c \
 					errors.c \
-					cleaners.c
-BON_SRC			=	main_bonus.c \
-					path_bonus.c \
-					errors_bonus.c
+					checks.c \
+					cleaners.c \
+					utils.c
+BON_SRC			=	main_bonus.c
 
 # Full paths to files
 MAN_SRC_FILES	=	$(addprefix $(SRC_MAN_DIR)/, $(MAN_SRC))
 BON_SRC_FILES	=	$(addprefix $(SRC_BON_DIR)/, $(BON_SRC))
 
 # Object files
-MAN_OBJ 		=	$(addprefix $(OBJ_MAN_DIR)/, $(MAN_SRC:.c=.o))
+MAN_OBJ			=	$(addprefix $(OBJ_MAN_DIR)/, $(MAN_SRC:.c=.o))
 BON_OBJ			=	$(addprefix $(OBJ_BON_DIR)/, $(BON_SRC:.c=.o))
 
 # Colors
-BLUE = \033[1;34m
-GREEN = \033[1;32m
-NC = \033[0m
+BLUE			=	\033[1;34m
+GREEN			=	\033[1;32m
+NC				=	\033[0m
 
 # Build rules
-all: 			$(NAME)
-				@echo "$(GREEN)--> Created pipex!$(NC)"
+all:				$(NAME)
+					@echo "$(GREEN)--> Created pipex!$(NC)"
 
-$(LIBFT):		@make -C $(LIBFT_DIR)
+$(LIBFT):			@make -C $(LIBFT_DIR)
 
-$(NAME): 		.mandatory
+$(NAME):			.mandatory
 
-.mandatory:		$(MAN_OBJ) $(LIBFT)
-				@$(CC) $(CFLAGS) $(MAN_OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME)
-				@$(RM) -r .bonus
+.mandatory:			$(MAN_OBJ) $(LIBFT)
+					@$(CC) $(CFLAGS) $(MAN_OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME)
+					@$(RM) -r .bonus
 
-bonus:			.bonus
-				@echo "$(GREEN)--> Created pipex_bonus!$(NC)"
+bonus:				.bonus
+					@echo "$(GREEN)--> Created pipex_bonus!$(NC)"
 
-.bonus:			$(BON_OBJ) $(LIBFT)
-				@$(CC) $(CFLAGS) $(BON_OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME)
-				@$(RM) -r .mandatory
+.bonus:				$(BON_OBJ) $(LIBFT)
+					@$(CC) $(CFLAGS) $(BON_OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME)
+					@$(RM) -r .mandatory
 
 # Object file compilation
 $(OBJ_MAN_DIR)/%.o: $(SRC_MAN_DIR)/%.c
-				@mkdir -p $(@D)
-				@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
+					@mkdir -p $(@D)
+					@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
 
 $(OBJ_BON_DIR)/%.o: $(SRC_BON_DIR)/%.c
-				@mkdir -p $(@D)
-				@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
+					@mkdir -p $(@D)
+					@$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
 
 # Cleaning rules
 clean:
-				@$(RM) -r $(OBJ_DIR)
-				@$(RM) .cache_exists
-				@make clean -C $(LIBFT_DIR)
-				@echo "$(BLUE)*.o files removed!$(NC)"
+					@$(RM) -r $(OBJ_DIR)
+					@$(RM) .cache_exists
+					@make clean -C $(LIBFT_DIR)
+					@echo "$(BLUE)*.o files removed!$(NC)"
 		
-fclean: 		clean 
-				@$(RM) $(NAME)
-				@$(RM) $(LIBFT)
-				@$(RM) -r .mandatory .bonus
-				@echo "$(BLUE)All files removed!$(NC)"
+fclean:				clean 
+					@$(RM) $(NAME)
+					@$(RM) $(LIBFT)
+					@$(RM) -r .mandatory .bonus
+					@echo "$(BLUE)All files removed!$(NC)"
 			
-re: 			fclean all
+re:					fclean all
 
-.PHONY: 		all clean fclean re bonus
+.PHONY:				all clean fclean re bonus

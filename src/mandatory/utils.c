@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azinchen <azinchen@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 18:03:38 by azinchen          #+#    #+#             */
-/*   Updated: 2024/11/14 18:03:40 by azinchen         ###   ########.fr       */
+/*   Created: 2024/11/15 15:13:17 by azinchen          #+#    #+#             */
+/*   Updated: 2024/11/15 15:13:19 by azinchen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int is_path_set(t_pipex *p, char *envp[])
+void	close_fds(int fd1, int fd2, t_pipex *p)
 {
-	int	i;
-
-	if (!envp)
-		return (0);
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp("envp[i]", "PATH=", 5) == 0)
-			p->is_path = 1; //where to set value to 0?
-		i++;
-	}
-	return (0);
+	if (close(fd1) == -1)
+		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
+	if (close(fd2) == -1)
+		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
 }
+
+//vot slomalsya perviy close, i chto so vtorym?

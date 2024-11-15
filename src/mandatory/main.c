@@ -17,11 +17,13 @@
 int main(int argc, char* argv[], char *envp[])
 {
 	t_pipex	*p;
+
 	if (argc != 5)
 		args_number_error();
 
 	p = (t_pipex *)malloc(sizeof(t_pipex));
 	if (!p)
 		error(ERR_MALLOC);
+	pipex(argv, envp, p);
 	return 0; 
 }
