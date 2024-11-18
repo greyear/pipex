@@ -17,10 +17,18 @@
 //cmd1 < file1 | cmd2 > file2
 //./pipex file1 cmd1 cmd2 file2
 
-void	init_pipex(t_pipex *p)
+static void	handle_command(char *cmd, t_pipex *p)
 {
-	p->fd[0] = -1;
-	p->fd[1] = -1;
+	char	**cmd_split;
+	char	*path;
+
+	cmd_split = custom_split(cmd);
+	if (!cmd_split)
+		//clean?
+	path = find_path();
+	if (!path)
+		//error
+	execve(path, cmd_split, envp); //store envp?
 }
 
 static void	child1(char* argv[], char *envp[], t_pipex *p)
@@ -46,7 +54,7 @@ static void	child1(char* argv[], char *envp[], t_pipex *p)
 
 	close_fds(in, fd[1], p);
 
-	execlp("ping", "ping", "-c", "5", "google.com", NULL);
+	//execlp("ping", "ping", "-c", "5", "google.com", NULL);
 	//execve(const char *pathname, char *const argv[], char *const envp[]);
 }
 
