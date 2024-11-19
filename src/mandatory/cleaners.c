@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-void	clean_arr(char **arr)
+void	clean_arr2(char **arr) //check all occurencies(
 {
 	int	i;
 
@@ -25,6 +25,22 @@ void	clean_arr(char **arr)
 	free(arr);
 }
 
+void	clean_arr(char ***arr)
+{
+	int	i;
+
+	i = 0;
+	if (*arr)
+	{
+		while ((*arr)[i])
+		{
+			free((*arr)[i]);
+			i++;
+		}
+		free(*arr);
+		*arr = NULL;
+	}	
+}
 void	clean_struct(t_pipex **p)
 {
 	if (!p || !*p)

@@ -24,6 +24,9 @@ int main(int argc, char* argv[], char *envp[])
 	p = (t_pipex *)malloc(sizeof(t_pipex));
 	if (!p)
 		error(ERR_MALLOC);
-	pipex(argv, envp, p);
+	pipex.argc = argc;
+	pipex.argv = argv;
+	pipex.envp = envp;
+	pipex(p.argv, p.envp, p);
 	return 0; 
 }

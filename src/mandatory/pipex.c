@@ -17,19 +17,6 @@
 //cmd1 < file1 | cmd2 > file2
 //./pipex file1 cmd1 cmd2 file2
 
-static void	handle_command(char *cmd, t_pipex *p)
-{
-	char	**cmd_split;
-	char	*path;
-
-	cmd_split = custom_split(cmd);
-	if (!cmd_split)
-		//clean?
-	path = find_path();
-	if (!path)
-		//error
-	execve(path, cmd_split, envp); //store envp?
-}
 
 static void	child1(char* argv[], char *envp[], t_pipex *p)
 {

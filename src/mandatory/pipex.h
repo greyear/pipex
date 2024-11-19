@@ -38,6 +38,9 @@
 
 typedef struct s_pipex
 {
+	int		argc;
+	char	*argv[];
+	char	*envp[];
 	pid_t	*pids;
 	char	**cmds;
 	int		fd[2];
@@ -47,7 +50,7 @@ typedef struct s_pipex
 
 //Main
 int		pipex(char* argv[], char *envp[], t_pipex *p);
-int 	is_path_set(t_pipex *p, char *envp[]);
+int		path_from_envp(t_pipex *p, char *envp[])
 
 //Utils
 void	close_fds(int fd1, int fd2, t_pipex *p);
@@ -57,7 +60,7 @@ void	args_number_error(void);
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p);
 
 //Cleaners
-void	clean_arr(char **arr);
+void	clean_arr(char ***arr);
 void	clean_struct(t_pipex **p);
 
 #endif
