@@ -12,7 +12,6 @@
 
 #include "pipex.h"
 
-
 static void	handle_command(char *cmd, t_pipex *p)
 {
 	char	**cmd_split;
@@ -25,7 +24,7 @@ static void	handle_command(char *cmd, t_pipex *p)
 	if (!path)
 		//error
 	execve(path, cmd_split, p->envp); //store envp?
-	//if execve failed
+	//if execve failed what to do?
 }
 
 char	**path_from_envp(t_pipex *p)

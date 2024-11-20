@@ -23,6 +23,25 @@ void	args_number_error(void)
 	exit(EXIT_FAILURE);
 }
 
+void	execve_fail(char *path, char **cmd_split)
+{
+	//what should be printed??????????????????
+	if (ft_putstr_fd("pipex: ........", 2) == -1)
+	{
+		perror("write error");//specify?
+		exit(EXIT_FAILURE);
+	}
+	if (ft_putstr_fd(*splitted_cmd, 2) == -1)
+	{
+		perror("write error");//specify?
+		exit(EXIT_FAILURE);
+	}
+	free(path);
+	path = NULL; //check if I need it
+	clean_arr(&cmd_split);
+	exit(EXIT_CMD_CANNOT_EXECUTE); //or 127?
+}
+
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p) //do I rly need ** everywhere?
 {
 	clean_struct(p);
