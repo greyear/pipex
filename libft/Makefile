@@ -31,7 +31,8 @@ FTIS_DIR		=	$(SRC_DIR)ft_is/ft_isalnum.c \
 					$(SRC_DIR)ft_is/ft_isdigit.c \
 					$(SRC_DIR)ft_is/ft_isprint.c \
 					$(SRC_DIR)ft_is/ft_issign.c \
-					$(SRC_DIR)ft_is/ft_isspace.c
+					$(SRC_DIR)ft_is/ft_isspace.c \
+					$(SRC_DIR)ft_is/ft_isquote.c
 				
 FTLST_DIR		=	$(SRC_DIR)ft_lst/ft_lstadd_back.c \
 					$(SRC_DIR)ft_lst/ft_lstadd_front.c \
