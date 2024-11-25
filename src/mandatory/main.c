@@ -21,12 +21,12 @@ int main(int argc, char* argv[], char *envp[])
 	if (argc != 5)
 		args_number_error();
 
-	p = (t_pipex *)malloc(sizeof(t_pipex));
+	p = (t_pipex *)malloc(sizeof(t_pipex)); //should we allocate it?
 	if (!p)
 		error(ERR_MALLOC);
-	pipex.argc = argc;
-	pipex.argv = argv;
-	pipex.envp = envp;
-	pipex(p.argv, p.envp, p);
+	p->argc = argc; //and use pointer?
+	p->argv = argv;
+	p->envp = envp;
+	pipex(p->argv, p->envp, p);
 	return 0; 
 }

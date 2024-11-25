@@ -31,7 +31,7 @@ void	execve_fail(char *path, char **cmd_split)
 		perror("write error");//specify?
 		exit(EXIT_FAILURE);
 	}
-	if (ft_putstr_fd(*splitted_cmd, 2) == -1)
+	if (ft_putstr_fd(*cmd_split, 2) == -1)
 	{
 		perror("write error");//specify?
 		exit(EXIT_FAILURE);

@@ -77,7 +77,7 @@ static int	count_words(char *str)
 		if (str[i] == '\'' || str[i] == '\"')
 		{
 			res++;
-			i += length_inside_quotes(&str[i]) + 2; //or 1?
+			i += length_inside_quotes(&str[i]) + 2;
 		}
 		else if (str[i] != ' ')
 		{
@@ -89,32 +89,43 @@ static int	count_words(char *str)
 	}
 	return (res);
 }
-/*
+
 static char	*one_word(char *str, int len)
 {
-	int	i;
+	int		i;
+	int		j;
+	char	*word;
 
-	dest = (char *)ft_calloc((len + 1), sizeof(char));
-	if (!dest)
+	word = (char *)ft_calloc((len + 1), sizeof(char));
+	if (!word)
 		return (NULL); //what else
 	i = 0;
-	//needs changes!
-	while (str[start] != ' ' && str[start] != '\0')
+	j = 0;
+	//what about $ symbol and ` symbol?
+	while (i < len)
 	{
-		dest[i] = str[start];
-		i++;
-		start++;
+		if (ft_isquote(str[0]) && str[i] == str[0])
+			i++;
+		else if (!ft_isquote(str[0]) && (str[i] == ' ' || str[i] == '\\'))
+			i++;
+		else
+			word[j++] = str[i++];
 	}
-	dest[i] = '\0';
-	return (dest);
+	word[j] = '\0';
+	return (word);
 }
-
-static char **all_words(const char *str)
+//from now on needs to be improved and rewritten
+static char **all_words(char *str, int count)
 {
 	int		i;
 	int		j;
 	int		index;
+	int		len;
+	char	**array;
 
+	array = (char **)ft_calloc((count + 1), sizeof(char *));
+	if (!array)
+		return (NULL);
 	index = 0;
 	i = 0;
 	while (str[i] != '\0')
@@ -126,7 +137,8 @@ static char **all_words(const char *str)
 			j = 0;
 			while (str[i + j] != ' ' && str[i + j] != '\0')
 				j++;
-			array[index] = (char *)malloc((j + 1) * sizeof(char));
+			len??
+			array[index] = one_word(str, len);
 			if (!array[index])
 			{
 				clean_arr(&array);
@@ -137,9 +149,10 @@ static char **all_words(const char *str)
 			index++;
 		}
 	}
+	array[count] = 0;
 	return (array);
 }
-*/
+
 char	**split_cmd(char *cmd)
 {
 	char	**res;
@@ -150,12 +163,9 @@ char	**split_cmd(char *cmd)
 	count = count_words(cmd);
 	//if (count == 0)
 	//	return (NULL);
-	res = (char **)ft_calloc((count + 1), sizeof(char *));
+	res = all_words(cmd, count);
 	if (!res)
 		return (NULL);
-	//if (ft_array(res, cmd) == -1)
-	//	return (NULL);
-	res[count] = 0;
 	return (res);
 }
 /*

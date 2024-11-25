@@ -27,5 +27,5 @@ int check_second_file(int argc, char **argv, t_pipex *p)
 		//file doesn't exist
 	if (access(argv[argc - 1], W_OK) == -1)
 		//no writing permission
-
+	
 }
