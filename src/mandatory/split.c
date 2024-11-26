@@ -14,9 +14,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	missing_quote(void)//can I put the quote as an input and show which is missing?
+void	missing_quote(char quote)//can I put the quote as an input and show which is missing?
 {
-	printf("missing quote");
+	printf("missing quote", quote);
 	exit(1);
 }
 
@@ -36,7 +36,7 @@ int	length_inside_quotes(char *str)
 		str++;
 	}
 	if (*str != any_quote)
-		missing_quote();
+		missing_quote(any_quote);
 	return (len);
 }
 
@@ -117,39 +117,32 @@ static char	*one_word(char *str, int len)
 //from now on needs to be improved and rewritten
 static char **all_words(char *str, int count)
 {
-	int		i;
-	int		j;
-	int		index;
+	int		w;
 	int		len;
 	char	**array;
 
 	array = (char **)ft_calloc((count + 1), sizeof(char *));
 	if (!array)
 		return (NULL);
-	index = 0;
-	i = 0;
-	while (str[i] != '\0')
+	w = 0;
+	while (*str && w < count)
 	{
-		if (str[i] == ' ')
-			i++;
+		if (*str == ' ')
+			str++;
+		if (ft_isquote(*str))
+			len = length_inside_quotes(str) + 2;
 		else
+			len = word_length(str);
+		array[w] = one_word(str, len);
+		if (!array[w])
 		{
-			j = 0;
-			while (str[i + j] != ' ' && str[i + j] != '\0')
-				j++;
-			len??
-			array[index] = one_word(str, len);
-			if (!array[index])
-			{
-				clean_arr(&array);
-				return (NULL);
-			}
-			one_word(str, i);
-			i = i + j;
-			index++;
+			clean_arr(&array);
+			return (NULL);
 		}
+		str += len;
+		w++;
 	}
-	array[count] = 0;
+	//array[count] = 0; //do we need it if I used calloc?
 	return (array);
 }
 
@@ -158,11 +151,11 @@ char	**split_cmd(char *cmd)
 	char	**res;
 	int		count;
 
-	if (!cmd)
+	if (!cmd || *cmd == '\0')
 		return (NULL);
 	count = count_words(cmd);
-	//if (count == 0)
-	//	return (NULL);
+	if (count == 0) //do I need it?
+		return (NULL);
 	res = all_words(cmd, count);
 	if (!res)
 		return (NULL);
