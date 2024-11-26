@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-int check_first_file(char **argv, t_pipex *p)
+int	check_first_file(char **argv, t_pipex *p)
 {
 	if (access(argv[1], F_OK) == -1)
 		//file doesn't exist
@@ -21,7 +21,7 @@ int check_first_file(char **argv, t_pipex *p)
 	
 }
 
-int check_second_file(int argc, char **argv, t_pipex *p)
+int	check_second_file(int argc, char **argv, t_pipex *p)
 {
 	if (access(argv[argc - 1], F_OK) == -1)
 		//file doesn't exist

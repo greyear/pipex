@@ -31,7 +31,7 @@ char	**path_from_envp(t_pipex *p)
 {
 	int	i;
 
-	if (!envp)
+	if (!p->envp)
 		return (0);
 	i = 0;
 	while (p->envp[i])

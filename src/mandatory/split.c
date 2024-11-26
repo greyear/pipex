@@ -14,12 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	missing_quote(char quote)//can I put the quote as an input and show which is missing?
-{
-	printf("missing quote", quote);
-	exit(1);
-}
-
 int	length_inside_quotes(char *str)
 {
 	char	any_quote;

@@ -12,19 +12,6 @@
 
 #include "pipex.h"
 
-void	clean_arr2(char **arr) //check all occurencies(
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}
-
 void	clean_arr(char ***arr)
 {
 	int	i;

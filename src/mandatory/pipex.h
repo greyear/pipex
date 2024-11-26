@@ -49,7 +49,7 @@ typedef struct s_pipex
 }	t_pipex;
 
 //Main
-int		pipex(char* argv[], char *envp[], t_pipex *p);
+int		pipex(t_pipex *p);
 int		path_from_envp(t_pipex *p, char *envp[]);
 
 //Utils
@@ -57,10 +57,19 @@ void	close_fds(int fd1, int fd2, t_pipex *p);
 
 //Errors
 void	args_number_error(void);
+void	execve_fail(char *path, char **cmd_split);
+void	missing_quote(char quote);
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p);
+
+//Checks
+int		check_first_file(char **argv, t_pipex *p);
+int		check_second_file(int argc, char **argv, t_pipex *p);
 
 //Cleaners
 void	clean_arr(char ***arr);
 void	clean_struct(t_pipex **p);
+
+//Utils
+void	close_fds(int fd1, int fd2, t_pipex *p);
 
 #endif

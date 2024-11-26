@@ -27,6 +27,6 @@ int main(int argc, char* argv[], char *envp[])
 	p->argc = argc; //and use pointer?
 	p->argv = argv;
 	p->envp = envp;
-	pipex(p->argv, p->envp, p);
+	pipex(p);
 	return 0; 
 }
