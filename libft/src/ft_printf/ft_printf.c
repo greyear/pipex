@@ -12,55 +12,55 @@
 
 #include "../../include/ft_printf.h"
 
-static int	ft_specifier(int c, va_list arg)
+static int	ft_specifier(int fd, int c, va_list arg)
 {
 	int	len;
 
 	len = 0;
 	if (c == 'c')
-		len = ft_print_char(va_arg(arg, int));
+		len = ft_print_char(fd, va_arg(arg, int));
 	if (c == 's')
-		len = ft_print_str(va_arg(arg, char *));
+		len = ft_print_str(fd, va_arg(arg, char *));
 	if (c == 'p')
-		len = ft_print_pointer(va_arg(arg, void *));
+		len = ft_print_pointer(fd, va_arg(arg, void *));
 	if (c == 'd' || c == 'i')
-		len = ft_print_int(va_arg(arg, int));
+		len = ft_print_int(fd, va_arg(arg, int));
 	if (c == 'u')
-		len = ft_print_unsign(va_arg(arg, unsigned int));
+		len = ft_print_unsign(fd, va_arg(arg, unsigned int));
 	if (c == 'x')
-		len = ft_print_hexa(va_arg(arg, unsigned int), 0);
+		len = ft_print_hexa(fd, va_arg(arg, unsigned int), 0);
 	if (c == 'X')
-		len = ft_print_hexa(va_arg(arg, unsigned int), 1);
+		len = ft_print_hexa(fd, va_arg(arg, unsigned int), 1);
 	if (c == '%')
-		len = ft_print_char('%');
+		len = ft_print_char(fd, '%');
 	return (len);
 }
 
-static int	ft_print_specif(const char	*str, va_list arg, int i)
+static int	ft_print_specif(int fd, const char *str, va_list arg, int i)
 {
 	int	len;
 	int	res;
 
 	len = 0;
-	res = ft_specifier(str[i + 1], arg);
+	res = ft_specifier(fd, str[i + 1], arg);
 	if (res == -1)
 		return (-1);
 	len += res;
 	return (len);
 }
 
-static int	ft_print_not_specif(const char	*str, int i)
+static int	ft_print_not_specif(int fd, const char	*str, int i)
 {
 	int	len;
 
 	len = 0;
-	if (write(1, &str[i], 1) == -1)
+	if (write(fd, &str[i], 1) == -1)
 		return (-1);
 	len++;
 	return (len);
 }
 
-static int	ft_total(const char	*str, va_list arg)
+static int	ft_total(int fd, const char	*str, va_list arg)
 {
 	int		i;
 	int		len;
@@ -75,10 +75,10 @@ static int	ft_total(const char	*str, va_list arg)
 		{
 			if (str[i + 1] == '\0')
 				break ;
-			res = ft_print_specif(str, arg, i++);
+			res = ft_print_specif(fd, str, arg, i++);
 		}
 		else
-			res = ft_print_not_specif(str, i);
+			res = ft_print_not_specif(fd, str, i);
 		if (res == -1)
 			return (-1);
 		len += res;
@@ -86,13 +86,13 @@ static int	ft_total(const char	*str, va_list arg)
 	return (len);
 }
 
-int	ft_printf(const char	*str, ...)
+int	ft_printf(int fd, const char *str, ...)
 {
 	va_list	arg;
 	int		len;
 
 	va_start(arg, str);
-	len = ft_total(str, arg);
+	len = ft_total(fd, str, arg);
 	va_end(arg);
 	return (len);
 }

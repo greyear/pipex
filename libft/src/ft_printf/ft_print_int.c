@@ -12,7 +12,7 @@
 
 #include "../../include/ft_printf.h"
 
-static int	ft_print_posit(int num)
+static int	ft_print_posit(int fd, int num)
 {
 	int		dig[10];
 	int		len;
@@ -30,51 +30,51 @@ static int	ft_print_posit(int num)
 	while (i >= 0)
 	{
 		symb = dig[i] + '0';
-		if (write(1, &symb, 1) == -1)
+		if (write(fd, &symb, 1) == -1)
 			return (-1);
 		i--;
 	}
 	return (len);
 }
 
-static int	ft_print_neg(int num)
+static int	ft_print_neg(int fd, int num)
 {
 	int	len;
 
 	len = 0;
 	if (num == -2147483648)
 	{
-		if (write(1, "-2147483648", 11) == -1)
+		if (write(fd, "-2147483648", 11) == -1)
 			return (-1);
 		else
 			len = 11;
 	}
 	else
 	{
-		if (write(1, "-", 1) == -1)
+		if (write(fd, "-", 1) == -1)
 			return (-1);
 		else
 			len += 1;
 		num = -num;
-		len += ft_print_posit(num);
+		len += ft_print_posit(fd, num);
 	}
 	return (len);
 }
 
-int	ft_print_int(int n)
+int	ft_print_int(int fd, int n)
 {
 	int	len;
 
 	len = 0;
 	if (n > 0)
-		len = ft_print_posit(n);
+		len = ft_print_posit(fd, n);
 	if (n == 0)
 	{
-		if (write(1, "0", 1) == -1)
+		if (write(fd, "0", 1) == -1)
 			return (-1);
 		len = 1;
 	}
 	if (n < 0)
-		len = ft_print_neg(n);
+		len = ft_print_neg(fd, n);
 	return (len);
 }

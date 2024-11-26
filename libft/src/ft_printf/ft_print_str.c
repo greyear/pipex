@@ -12,20 +12,20 @@
 
 #include "../../include/ft_printf.h"
 
-int	ft_print_str(char *str)
+int	ft_print_str(int fd, char *str)
 {
 	int	len;
 
 	if (str == NULL)
 	{
-		if (write(1, "(null)", 6) == -1)
+		if (write(fd, "(null)", 6) == -1)
 			return (-1);
 		return (6);
 	}
 	len = 0;
 	while (str[len])
 		len++;
-	if (write(1, str, len) == -1)
+	if (write(fd, str, len) == -1)
 		return (-1);
 	return (len);
 }

@@ -33,7 +33,7 @@ static int	ft_hex_arr(unsigned int n, int flag, char hexa[16])
 	return (len);
 }
 
-int	ft_print_hexa(unsigned int n, int flag)
+int	ft_print_hexa(int fd, unsigned int n, int flag)
 {
 	int		len;
 	int		i;
@@ -41,7 +41,7 @@ int	ft_print_hexa(unsigned int n, int flag)
 
 	if (n == 0)
 	{
-		if (write(1, "0", 1) == -1)
+		if (write(fd, "0", 1) == -1)
 			return (-1);
 		return (1);
 	}
@@ -49,7 +49,7 @@ int	ft_print_hexa(unsigned int n, int flag)
 	i = len - 1;
 	while (i >= 0)
 	{
-		if (ft_print_char(hexa[i--]) == -1)
+		if (ft_print_char(fd, hexa[i--]) == -1)
 			return (-1);
 	}
 	return (len);

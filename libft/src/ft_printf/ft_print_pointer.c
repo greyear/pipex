@@ -31,7 +31,7 @@ static int	ft_long_hex_arr(unsigned long n, char hexa[16])
 	return (len);
 }
 
-static int	ft_print_long_hexa(unsigned long n)
+static int	ft_print_long_hexa(int fd, unsigned long n)
 {
 	int		len;
 	int		i;
@@ -39,7 +39,7 @@ static int	ft_print_long_hexa(unsigned long n)
 
 	if (n == 0)
 	{
-		if (write(1, "0", 1) == -1)
+		if (write(fd, "0", 1) == -1)
 			return (-1);
 		return (1);
 	}
@@ -47,21 +47,27 @@ static int	ft_print_long_hexa(unsigned long n)
 	i = len - 1;
 	while (i >= 0)
 	{
-		if (ft_print_char(hexa[i--]) == -1)
+		if (ft_print_char(fd, hexa[i--]) == -1)
 			return (-1);
 	}
 	return (len);
 }
 
-int	ft_print_pointer(void *p)
+int	ft_print_pointer(int fd, void *p)
 {
 	int	len;
 
+	if (p == NULL)
+	{
+		if (write(fd, "(nil)", 5) == -1)
+			return (-1);
+		return (5);
+	}
 	len = 0;
-	if (write(1, "0x", 2) == -1)
+	if (write(fd, "0x", 2) == -1)
 		return (-1);
 	else
 		len += 2;
-	len += ft_print_long_hexa((unsigned long)p);
+	len += ft_print_long_hexa(fd, (unsigned long)p);
 	return (len);
 }

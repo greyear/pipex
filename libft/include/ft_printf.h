@@ -16,12 +16,12 @@
 # include <unistd.h>
 # include <stdarg.h>
 
-int	ft_printf(const char *str, ...);
-int	ft_print_char(char c);
-int	ft_print_str(char *str);
-int	ft_print_int(int n);
-int	ft_print_unsign(unsigned int n);
-int	ft_print_hexa(unsigned int n, int flag);
-int	ft_print_pointer(void *n);
+int	ft_printf(int fd, const char *str, ...);
+int	ft_print_char(int fd, char c);
+int	ft_print_str(int fd, char *str);
+int	ft_print_int(int fd, int n);
+int	ft_print_unsign(int fd, unsigned int n);
+int	ft_print_hexa(int fd, unsigned int n, int flag);
+int	ft_print_pointer(int fd, void *n);
 
 #endif
