@@ -23,7 +23,7 @@ static void	handle_command(char *cmd, t_pipex *p)
 	path = find_path(cmd_split, p);
 	if (!path)
 		//error
-	execve(path, cmd_split, p->envp); //store envp?
+	execve(path, cmd_split, p->envp);
 	//if execve failed what to do?
 }
 

@@ -52,6 +52,16 @@ void	missing_quote(char quote)
 	exit(EXIT_FAILURE);
 }
 
+void	error_exit_code(char *reason, int exit_code)
+{
+	if (ft_putstr_fd(reason, 2) == -1)
+	{
+		perror("write error");//specify?
+		exit(EXIT_FAILURE);
+	}
+	exit(exit_code);
+}
+
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p) //do I rly need ** everywhere?
 {
 	clean_struct(p);

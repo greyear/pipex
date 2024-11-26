@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int	length_inside_quotes(char *str)
+static int	length_inside_quotes(char *str)
 {
 	char	any_quote;
 	int		len;
@@ -34,7 +34,7 @@ int	length_inside_quotes(char *str)
 	return (len);
 }
 
-int	word_length(char *str)
+static int	word_length(char *str)
 {
 	int	len;
 	//if
