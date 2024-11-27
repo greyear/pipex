@@ -80,6 +80,7 @@ int	waiting(pid_t pid1, pid_t pid2, t_pipex *p)
 		error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
 	if (waitpid(pid2, &status2, 0) == -1)
 		error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
+	
 }
 
 int	pipex(t_pipex *p)
