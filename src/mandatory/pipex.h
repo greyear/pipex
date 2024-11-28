@@ -60,6 +60,7 @@ void	close_fds(int fd1, int fd2, t_pipex *p);
 void	args_number_error(void);
 void	execve_fail(char *path, char **cmd_split);
 void	missing_quote(char quote);
+void	error_code(char *reason);
 void	error_exit_code(char *reason, int exit_code);
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p);
 

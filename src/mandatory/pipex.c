@@ -71,18 +71,6 @@ static void	child2(t_pipex *p)
 	execlp("grep", "grep", "rtt", NULL);
 }
 
-int	waiting(pid_t pid1, pid_t pid2, t_pipex *p)
-{
-	int	status1;
-	int	status2;
-
-	if (waitpid(pid1, &status1, 0) == -1)
-		error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
-	if (waitpid(pid2, &status2, 0) == -1)
-		error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
-	
-}
-
 int	pipex(t_pipex *p)
 {
 	pid_t	pid1;
@@ -113,4 +101,18 @@ int	pipex(t_pipex *p)
 	
 	status = waiting(pid1, pid2, p);
 	return (status);
+}
+
+int	waiting(pid_t pid1, pid_t pid2, t_pipex *p)
+{
+	int	status;
+	int	pid_counter;
+
+	while (pid_counter < cmd_num)
+	{
+		if (waitpid(pid2, &status, 0) == -1)
+			error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
+		pid_counter++;
+	}
+	return ((status >> 8) & 255);
 }

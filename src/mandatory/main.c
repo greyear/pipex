@@ -30,7 +30,7 @@ int main(int argc, char* argv[], char *envp[])
 	p->pids = (pid_t *)malloc((p->argc - 3) * sizeof(pid_t)); //calloc?
 	if (!p)
 		error_clean_exit_code(ERR_MALLOC, EXIT_FAILURE, p);
-	status = pipex(p);
-	//freeing
+	status = waiting(p);
+	//happy path freeing
 	return (status);
 }
