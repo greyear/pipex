@@ -110,7 +110,7 @@ int	waiting(pid_t pid1, pid_t pid2, t_pipex *p)
 
 	while (pid_counter < cmd_num)
 	{
-		if (waitpid(pid2, &status, 0) == -1)
+		if (waitpid(p->pids[pid_counter], &status, 0) == -1)
 			error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
 		pid_counter++;
 	}
