@@ -43,6 +43,7 @@ typedef struct s_pipex
 	char	**envp;
 	pid_t	*pids;
 	char	**cmds;
+	int		cmd_num;
 	int		fd[2];
 	int		is_path;
 	char	*path;

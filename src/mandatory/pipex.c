@@ -77,6 +77,10 @@ int	pipex(t_pipex *p)
 	pid_t	pid2;
 	int		status;
 
+	while (p->cmd_num < p->argc - 1)
+	{
+		
+	}
 	if (pipe(p->fd) == -1)
 		error_clean_exit_code(ERR_PIPE, EXIT_FAILURE, &p);
 
@@ -108,7 +112,8 @@ int	waiting(pid_t pid1, pid_t pid2, t_pipex *p)
 	int	status;
 	int	pid_counter;
 
-	while (pid_counter < cmd_num)
+	pipex(p);
+	while (pid_counter < p->cmd_num)
 	{
 		if (waitpid(p->pids[pid_counter], &status, 0) == -1)
 			error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
