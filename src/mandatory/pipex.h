@@ -45,6 +45,7 @@ typedef struct s_pipex
 	char	**cmds;
 	int		cmd_num;
 	int		fd[2];
+	int		cur_fd;
 	int		is_path;
 	char	*path;
 }	t_pipex;

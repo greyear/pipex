@@ -21,10 +21,10 @@ int main(int argc, char* argv[], char *envp[])
 
 	if (argc != 5)
 		args_number_error();
-	p = (t_pipex *)malloc(sizeof(t_pipex)); //should we allocate it?
+	p = (t_pipex *)malloc(sizeof(t_pipex));
 	if (!p)
 		error_exit_code(ERR_MALLOC, EXIT_FAILURE);
-	p->argc = argc; //and use pointer?
+	p->argc = argc;
 	p->argv = argv;
 	p->envp = envp;
 	p->pids = (pid_t *)malloc((p->argc - 3) * sizeof(pid_t)); //calloc?
