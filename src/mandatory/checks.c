@@ -12,20 +12,18 @@
 
 #include "pipex.h"
 
-int	check_first_file(char **argv, t_pipex *p)
+void	check_first_file(t_pipex *p)
 {
-	if (access(argv[1], F_OK) == -1)
-		//file doesn't exist
-	if (access(argv[1], R_OK) == -1)
-		//no reading permission
-	
+	if (access(p->argv[1], F_OK) == -1)
+		file_error(ZSH_NO_FILE, p->argv[1], 0, &p); //0?
+	if (access(p->argv[1], R_OK) == -1)
+		file_error(ZSH_PERM, p->argv[1], 1, &p); //1?
 }
 
-int	check_second_file(int argc, char **argv, t_pipex *p)
+void	check_second_file(t_pipex *p)
 {
-	if (access(argv[argc - 1], F_OK) == -1)
+	//if (access(p->argv[p->argc - 1], F_OK) == -1)
 		//file doesn't exist
-	if (access(argv[argc - 1], W_OK) == -1)
-		//no writing permission
-	
+	if (access(p->argv[p->argc - 1], W_OK) == -1)
+		file_error(ZSH_PERM, p->argv[p->argc - 1], 1, &p); //1?	
 }

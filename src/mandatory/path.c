@@ -12,19 +12,19 @@
 
 #include "pipex.h"
 
-static void	handle_command(char *cmd, t_pipex *p)
+void	handle_command(char *cmd, t_pipex *p)
 {
 	char	**cmd_split;
 	char	*path;
 
-	cmd_split = custom_split(cmd);
+	cmd_split = split_cmd(cmd);
 	if (!cmd_split)
-		//clean?
+		return ; //clean?
 	path = find_path(cmd_split, p);
 	if (!path)
-		//error
+		return ; //error
 	execve(path, cmd_split, p->envp);
-	//if execve failed what to do?
+	execve_fail("zsh: command not found: ", path, cmd_split); //check msg
 }
 
 char	**path_from_envp(t_pipex *p)
@@ -43,18 +43,18 @@ char	**path_from_envp(t_pipex *p)
 	return (NULL);
 }
 
-char	*make_full_path(char *one_path, char *cmd)
+static char	*make_full_path(char *one_path, char *cmd)
 {
 	char	*premade;
 	char	*made;
 
 	premade = ft_strjoin(one_path, "/");
 	if (!premade)
-		//malloc protection
+		return (NULL); //clean?
 	made = ft_strjoin(premade, cmd);
 	if (!made)
-		//another protection
-	//free cmd?
+		return (NULL); //clean?
+	free(cmd);
 	return (made);
 }
 
@@ -66,13 +66,14 @@ char	*find_path(char **cmd_split, t_pipex *p)
 
 	if (ft_strchr(cmd_split[0], '/') != NULL)
 	{
-		if (access(cmd_split, F_OK) == 0)
-			return (ft_strdup(cmd_split));
+		if (access(cmd_split[0], F_OK) == 0)
+			return (ft_strdup(cmd_split[0]));
 		else
-			//error: "No such file or directory"
+			cmd_error(NO_FILE_DIR, cmd_split, 1);
 	}
 	path = path_from_envp(p);
-	//check (?)
+	if (!path)
+		return (NULL); //clean?
 	i = 0;
 	while (path[i])
 	{
@@ -81,7 +82,7 @@ char	*find_path(char **cmd_split, t_pipex *p)
 			//protection
 		if (access(res, F_OK) == 0)
 			return (res);
-		//I think freeing paths shouldn't be here
+		free(res);
 		i++;
 	}
 	clean_arr(&path);;
@@ -89,7 +90,7 @@ char	*find_path(char **cmd_split, t_pipex *p)
 }
 
 
-
+/*
 Взяли команду как строку, разделили ее по словам, сделали массив: "ls -l /home" становится ["ls", "-l", "/home"].
 Проверили, есть ли в этом массиве / (путь )
 Если есть: 
@@ -129,4 +130,4 @@ char	*find_path(char **cmd_split, t_pipex *p)
 /usr/bin:
 /sbin:
 /usr/sbin:
-/usr/local/bin
+/usr/local/bin*/

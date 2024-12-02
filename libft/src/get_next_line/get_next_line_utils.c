@@ -12,7 +12,7 @@
 
 #include "../../include/get_next_line_utils.h"
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strln(const char *str)
 {
 	size_t	len;
 
@@ -24,7 +24,7 @@ size_t	ft_strlen(const char *str)
 	return (len);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchar(const char *s, int c)
 {
 	char	symb;
 	int		i;
@@ -53,7 +53,7 @@ char	*ft_strjoin_stash(char *stash, char *buf)
 
 	if (!stash && !buf)
 		return (NULL);
-	len = ft_strlen(stash) + ft_strlen(buf);
+	len = ft_strln(stash) + ft_strln(buf);
 	res = (char *)malloc((len + 1) * sizeof(char));
 	if (!res)
 		return (NULL);
@@ -78,9 +78,9 @@ char	*ft_substrg(char *stash, unsigned int start, size_t len)
 
 	if (!stash)
 		return (NULL);
-	if ((unsigned int)ft_strlen(stash) < start)
+	if ((unsigned int)ft_strln(stash) < start)
 		return ((char *)malloc(1 * sizeof(char)));
-	left = ft_strlen(stash + start);
+	left = ft_strln(stash + start);
 	if (left < len)
 		len = left;
 	res = (char *)malloc((len + 1) * sizeof(char));

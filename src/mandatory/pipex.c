@@ -12,11 +12,8 @@
 
 #include "pipex.h"
 
-//simulation of: "ping -c 5 google.com | grep rtt"
-
 //cmd1 < file1 | cmd2 > file2
 //./pipex file1 cmd1 cmd2 file2
-
 
 static void	child(t_pipex *p)
 {
@@ -61,17 +58,12 @@ static void	child(t_pipex *p)
 	if (dup2(fd_out, STDOUT_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
 	close_fds(fd_in, fd_out, p);
-
-	//execlp("ping", "ping", "-c", "5", "google.com", NULL);
-	//execve(const char *pathname, char *const argv[], char *const envp[]);
+	handle_command(p->argv[p->cmd_num], p);
+	exit(EXIT_SUCCESS);
 }
 
-int	pipex(t_pipex *p)
+void	pipex(t_pipex *p)
 {
-	pid_t	pid1;
-	pid_t	pid2;
-	int		status;
-
 	p->cmd_num = 0;
 	while (p->cmd_num < p->argc - 3)
 	{
@@ -86,11 +78,7 @@ int	pipex(t_pipex *p)
 		}
 		p->cmd_num++;
 	}
-		
-	
 	close_fds(p->fd[0], p->fd[1], p);
-	status = waiting(pid1, pid2, p);
-	return (status);
 }
 
 int	waiting(t_pipex *p)
@@ -99,6 +87,7 @@ int	waiting(t_pipex *p)
 	int	pid_counter;
 
 	pipex(p);
+	pid_counter = 0;
 	while (pid_counter < p->cmd_num)
 	{
 		if (waitpid(p->pids[pid_counter], &status, 0) == -1)

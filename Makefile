@@ -42,6 +42,7 @@ MAN_SRC			=	main.c \
 					errors.c \
 					checks.c \
 					cleaners.c \
+					split.c \
 					utils.c
 BON_SRC			=	main_bonus.c
 
@@ -62,7 +63,8 @@ NC				=	\033[0m
 all:				$(NAME)
 					@echo "$(GREEN)--> Created pipex!$(NC)"
 
-$(LIBFT):			@make -C $(LIBFT_DIR)
+$(LIBFT):			
+					@make -C $(LIBFT_DIR)
 
 $(NAME):			.mandatory
 

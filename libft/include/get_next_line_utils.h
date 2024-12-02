@@ -21,8 +21,8 @@
 #  define BUFFER_SIZE 1000000
 # endif
 
-size_t	ft_strlen(const char *str);
-char	*ft_strchr(const char *s, int c);
+size_t	ft_strln(const char *str);
+char	*ft_strchar(const char *s, int c);
 char	*ft_strjoin_stash(char *stash, char *buf);
 char	*ft_substrg(char *stash, unsigned int start, size_t len);
 size_t	find_nl(char *stash);

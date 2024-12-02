@@ -30,8 +30,12 @@
 # define ERR_PIPE "Pipe creation failed"
 # define ERR_DUP2 "Dup2 function failed"
 # define ERR_WAITPID "Waitpid function failed"
+# define ERR_EXECVE "Execve failed"
 # define ERR_OPEN "Opening failed" //do I need to specify?
 # define ERR_CLOSE "Closing failed"
+# define NO_FILE_DIR "No such file or directory"
+# define ZSH_NO_FILE "zsh: no such file or directory: "
+# define ZSH_PERM "zsh: permission denied: "
 
 # define EXIT_CMD_CANNOT_EXECUTE 126
 # define EXIT_CMD_NOT_FOUND 127
@@ -51,24 +55,29 @@ typedef struct s_pipex
 }	t_pipex;
 
 //Main
-int		pipex(t_pipex *p);
-int		path_from_envp(t_pipex *p, char *envp[]);
+void	pipex(t_pipex *p);
+int		waiting(t_pipex *p);
+char	**path_from_envp(t_pipex *p);
+char	*find_path(char **cmd_split, t_pipex *p);
 char	**split_cmd(char *cmd);
+void	handle_command(char *cmd, t_pipex *p);
 
 //Utils
 void	close_fds(int fd1, int fd2, t_pipex *p);
 
 //Errors
 void	args_number_error(void);
-void	execve_fail(char *path, char **cmd_split);
+void	execve_fail(char *reason, char *path, char **cmd_split);
+void	cmd_error(char *reason, char **cmd_split, int if_clean);
+void	file_error(char *reason, char *file, int exit_code, t_pipex **p);
 void	missing_quote(char quote);
 void	error_code(char *reason);
 void	error_exit_code(char *reason, int exit_code);
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p);
 
 //Checks
-int		check_first_file(char **argv, t_pipex *p);
-int		check_second_file(int argc, char **argv, t_pipex *p);
+void	check_first_file(t_pipex *p);
+void	check_second_file(t_pipex *p);
 
 //Cleaners
 void	clean_arr(char ***arr);

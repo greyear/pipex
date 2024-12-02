@@ -28,8 +28,8 @@ int main(int argc, char* argv[], char *envp[])
 	p->argv = argv;
 	p->envp = envp;
 	p->pids = (pid_t *)malloc((p->argc - 3) * sizeof(pid_t)); //calloc?
-	if (!p)
-		error_clean_exit_code(ERR_MALLOC, EXIT_FAILURE, p);
+	if (!p->pids)
+		error_clean_exit_code(ERR_MALLOC, EXIT_FAILURE, &p);
 	status = waiting(p);
 	//happy path freeing
 	return (status);

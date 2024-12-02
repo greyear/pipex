@@ -57,7 +57,7 @@ static char	*new_stash(char *stash)
 	if (stash[0] == '\0')
 		return (free_string(&stash));
 	nl = find_nl(stash);
-	new = (char *)malloc((ft_strlen(stash) - nl + 1) * sizeof(char));
+	new = (char *)malloc((ft_strln(stash) - nl + 1) * sizeof(char));
 	if (!new)
 		return (free_string(&stash));
 	i = 0;
@@ -76,7 +76,7 @@ static int	read_until_nl(int fd, char **stash, char **buf)
 	int		bytes;
 
 	bytes = 1;
-	while (!ft_strchr(*stash, '\n') && (bytes != 0))
+	while (!ft_strchar(*stash, '\n') && (bytes != 0))
 	{
 		bytes = read(fd, *buf, BUFFER_SIZE);
 		if (bytes == -1)

@@ -23,10 +23,9 @@ void	args_number_error(void)
 	exit(EXIT_FAILURE);
 }
 
-void	execve_fail(char *path, char **cmd_split)
+void	execve_fail(char *reason, char *path, char **cmd_split)
 {
-	//what should be printed??????????????????
-	if (ft_putstr_fd("pipex: ........", 2) == -1)
+	if (ft_putstr_fd(reason, 2) == -1)
 	{
 		perror("write error");//specify?
 		exit(EXIT_FAILURE);
@@ -40,6 +39,21 @@ void	execve_fail(char *path, char **cmd_split)
 	path = NULL; //check if I need it
 	clean_arr(&cmd_split);
 	exit(EXIT_CMD_CANNOT_EXECUTE); //or 127?
+}
+
+void	cmd_error(char *reason, char **cmd_split, int if_clean)
+{
+	ft_printf(2, "Pipex: %s, %s", cmd_split[0], reason);
+	if (if_clean)
+		clean_arr(&cmd_split);
+	exit(EXIT_CMD_NOT_FOUND);
+}
+
+void	file_error(char *reason, char *file, int exit_code, t_pipex **p) // **?
+{
+	ft_printf(2, "Pipex: %s, %s", reason, file);
+	clean_struct(p);
+	exit(exit_code);
 }
 
 void	missing_quote(char quote)

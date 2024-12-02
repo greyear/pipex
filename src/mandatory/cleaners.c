@@ -32,8 +32,8 @@ void	clean_struct(t_pipex **p)
 {
 	if (!p || !*p)
 		return ;
-	clean_arr((*p)->cmds);
-
+	clean_arr(&((*p)->cmds));
+	// what else
 	free(*p);
 	*p = NULL;
 }
