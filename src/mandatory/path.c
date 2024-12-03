@@ -21,10 +21,22 @@ void	handle_command(char *cmd, t_pipex *p)
 	if (!cmd_split)
 		return ; //clean?
 	path = find_path(cmd_split, p);
+	//ft_printf(2, "---->%s<--- \n", *cmd_split);
+	//ft_printf(2, "---->%s<--- \n", path);
 	if (!path)
+	{
 		return ; //error
+	}
+	//ft_printf(2, "---->cmd0: %s<--- \n", cmd_split[0]);
+	//ft_printf(2, "---->cmd1: %s<--- \n", cmd_split[1]);
+	///ft_printf(2, "---->path: %s<--- \n", path);
+	//ft_printf(2, "envp[37]: %s\n", p->envp[37]);
+	/*for (int i = 0; p->envp[i]; i++)
+	{
+		ft_printf(2, "envp[%d]: %s\n", i, p->envp[i]);
+	}*/
 	execve(path, cmd_split, p->envp);
-	execve_fail("zsh: command not found: ", path, cmd_split); //check msg
+	//execve_fail("zsh: command not found: ", path, cmd_split); //check msg
 }
 
 char	**path_from_envp(t_pipex *p)
@@ -37,7 +49,9 @@ char	**path_from_envp(t_pipex *p)
 	while (p->envp[i])
 	{
 		if (ft_strncmp(p->envp[i], "PATH=", 5) == 0)
+		{
 			return (ft_split(p->envp[i] + 5, ':'));
+		}
 		i++;
 	}
 	return (NULL);
@@ -54,7 +68,7 @@ static char	*make_full_path(char *one_path, char *cmd)
 	made = ft_strjoin(premade, cmd);
 	if (!made)
 		return (NULL); //clean?
-	free(cmd);
+	//free(cmd);
 	return (made);
 }
 
@@ -79,13 +93,18 @@ char	*find_path(char **cmd_split, t_pipex *p)
 	{
 		res = make_full_path(path[i], cmd_split[0]);
 		if (!res)
+			ft_printf(2, "FAILED");
 			//protection
 		if (access(res, F_OK) == 0)
+		{
+			//ft_printf(2, "---->%s<--- \n", res);
 			return (res);
-		free(res);
+		}
+			
+		//free(res);
 		i++;
 	}
-	clean_arr(&path);;
+	//clean_arr(&path);;
 	return (NULL);
 }
 
