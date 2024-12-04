@@ -25,10 +25,12 @@ static void	child(t_pipex *p)
 	int	fd_in;
 	int fd_out;
 
+	//if (p->cmd_num != 0 && p->cmd_num != p->argc - 4) //delete
 	fd_in = p->fd[0]; //for every case
 	if (p->cmd_num == 0) //special case for the 1st process
 	{
 		fd_in = open(p->argv[1], O_RDONLY);
+		//ft_printf(2, "---->fd_in %d<--- \n", fd_in);
 		if (fd_in < 0)
 		{
 			close_fds(p->fd[0], p->fd[1], p);
@@ -43,11 +45,14 @@ static void	child(t_pipex *p)
 	}
 	if (dup2(fd_in, STDIN_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
-	
+	//ft_printf(2, "---->fd_in %d<--- \n", fd_in);
+	//ft_printf(2, "---->STDIN_FILENO %d<--- \n", STDIN_FILENO);
+	//if (p->cmd_num != 0 && p->cmd_num != p->argc - 4) //delete
 	fd_out = p->fd[1]; //for every case
 	if (p->cmd_num == p->argc - 4) //for the last process
 	{
 		fd_out = open(p->argv[p->argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		//ft_printf(2, "---->fd_out %d<--- \n", fd_out);
 		if (fd_out < 0)
 		{
 			close_fds(p->fd[0], p->fd[1], p);
@@ -62,9 +67,22 @@ static void	child(t_pipex *p)
 	}
 	if (dup2(fd_out, STDOUT_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
+	//ft_printf(2, "---->fd_out %d<--- \n", fd_out);
+	//ft_printf(2, "---->STDOUT_FILENO %d<--- \n", STDOUT_FILENO);
+
 	close_fds(fd_in, fd_out, p);
 	//ft_printf(2, "Executing command: %s\n", p->argv[p->cmd_num + 2]); //delete
 	//ft_printf(2, "---->%s<--- \n", p->argv[p->cmd_num + 2]);
+
+	/*int fd_log = open("child_log.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
+    if (fd_log < 0)
+    {
+        perror("open");
+        error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); // Handle log file error
+    }
+    dprintf(fd_log, "cmd%d: %s\n", p->cmd_num, p->argv[p->cmd_num + 2]);
+    close(fd_log);*/
+
 	handle_command(p->argv[p->cmd_num + 2], p);
 	exit(EXIT_SUCCESS);
 }

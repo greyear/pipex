@@ -27,11 +27,12 @@ void	handle_command(char *cmd, t_pipex *p)
 	{
 		return ; //error
 	}
-	//ft_printf(2, "---->cmd0: %s<--- \n", cmd_split[0]);
-	//ft_printf(2, "---->cmd1: %s<--- \n", cmd_split[1]);
-	//ft_printf(2, "---->path: %s<--- \n", path);
-	//ft_printf(2, "envp[37]: %s\n", p->envp[37]);
-	/*for (int i = 0; p->envp[i]; i++)
+	/*ft_printf(2, "---->cmd0: %s<--- \n", cmd_split[0]);
+	ft_printf(2, "---->cmd1: %s<--- \n", cmd_split[1]);
+	ft_printf(2, "---->cmd2: %s<--- \n", cmd_split[2]);
+	ft_printf(2, "---->path: %s<--- \n", path);*/
+	/*ft_printf(2, "envp[37]: %s\n", p->envp[37]);
+	for (int i = 0; p->envp[i]; i++)
 	{
 		ft_printf(2, "envp[%d]: %s\n", i, p->envp[i]);
 	}*/
