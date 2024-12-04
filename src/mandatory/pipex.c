@@ -22,93 +22,83 @@
 
 static void	child(t_pipex *p)
 {
-	int	fd_in;
 	int fd_out;
 
-	//if (p->cmd_num != 0 && p->cmd_num != p->argc - 4) //delete
-	fd_in = p->fd[0]; //for every case
-	if (p->cmd_num == 0) //special case for the 1st process
+	if (p->cmd_num == 0) //the 1st process
 	{
-		fd_in = open(p->argv[1], O_RDONLY);
-		//ft_printf(2, "---->fd_in %d<--- \n", fd_in);
-		if (fd_in < 0)
+		p->cur_fd = open(p->argv[1], O_RDONLY);
+		if (p->cur_fd < 0)
 		{
-			close_fds(p->fd[0], p->fd[1], p);
+			//close_fds(p->fd[0], p->fd[1], p);
 			error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
 		}
-		if (close(p->fd[0]) == -1)
-		{
-			close_fds(fd_in, p->fd[1], p);
-			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
-		}
-
 	}
-	if (dup2(fd_in, STDIN_FILENO) == -1)
+	if (dup2(p->cur_fd, STDIN_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
-	//ft_printf(2, "---->fd_in %d<--- \n", fd_in);
-	//ft_printf(2, "---->STDIN_FILENO %d<--- \n", STDIN_FILENO);
-	//if (p->cmd_num != 0 && p->cmd_num != p->argc - 4) //delete
-	fd_out = p->fd[1]; //for every case
-	if (p->cmd_num == p->argc - 4) //for the last process
+	if (p->cmd_num != p->argc - 4) //all except the last
+	{
+		if (dup2(p->fd[1], STDOUT_FILENO) == -1)
+			error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
+	}
+	else if (p->cmd_num == p->argc - 4) //the last process
 	{
 		fd_out = open(p->argv[p->argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		//ft_printf(2, "---->fd_out %d<--- \n", fd_out);
 		if (fd_out < 0)
 		{
-			close_fds(p->fd[0], p->fd[1], p);
+			//close_fds(p->fd[0], p->fd[1], p);
 			error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
 		}
-		if (close(p->fd[1]) == -1)
+		if (dup2(fd_out, STDOUT_FILENO) == -1)
+			error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
+		if (close(fd_out) == -1)
 		{
-			close_fds(p->fd[0], fd_out, p);
+			ft_printf(2, "Here1");
+			//close_fds(p->fd[0], fd_out, p);
 			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
 		}
-		
 	}
-	if (dup2(fd_out, STDOUT_FILENO) == -1)
-		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
-	//ft_printf(2, "---->fd_out %d<--- \n", fd_out);
-	//ft_printf(2, "---->STDOUT_FILENO %d<--- \n", STDOUT_FILENO);
-
-	close_fds(fd_in, fd_out, p);
-	//ft_printf(2, "Executing command: %s\n", p->argv[p->cmd_num + 2]); //delete
-	//ft_printf(2, "---->%s<--- \n", p->argv[p->cmd_num + 2]);
-
-	/*int fd_log = open("child_log.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if (fd_log < 0)
-    {
-        perror("open");
-        error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); // Handle log file error
-    }
-    dprintf(fd_log, "cmd%d: %s\n", p->cmd_num, p->argv[p->cmd_num + 2]);
-    close(fd_log);*/
-
+	if (close(p->fd[0]) == -1)
+	{
+		ft_printf(2, "Here2");
+		//close_fds(fd_in, p->fd[1], p);
+		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
+	}
 	handle_command(p->argv[p->cmd_num + 2], p);
 	exit(EXIT_SUCCESS);
 }
 
 void	pipex(t_pipex *p)
 {
-	//p->cmd_num = 0;
+	p->cur_fd = -1;
 	while (p->cmd_num < p->argc - 3)
 	{
-		//printf("cmd_num: %d, p->cmd_num: %d\n", p->cmd_num, p->argc - 3);
 		if (pipe(p->fd) == -1)
-		{
 			error_clean_exit_code(ERR_PIPE, EXIT_FAILURE, &p);
-		}
-		//printf("Created pipe: fd[0] = %d, fd[1] = %d\n", p->fd[0], p->fd[1]); //delete
+
 		p->pids[p->cmd_num] = fork();
 		if (p->pids[p->cmd_num] < 0)
 			error_clean_exit_code(ERR_FORK, EXIT_FAILURE, &p);
+		//ft_printf(2, "%d", p->pids[p->cmd_num]);
 		if (p->pids[p->cmd_num] == 0)
 		{
-			//printf("cmd_num: %d, p->pids[p->cmd_num]: %d\n", p->cmd_num, p->pids[p->cmd_num]);
 			child(p); //child 1 for cmd1 (right end of pipe, writing end)
+			close_fds(p->cur_fd, p->fd[1], p);
 		}
+		else if (close(p->fd[1]) == -1)
+		{
+			//ft_printf(2, "Here2");
+			//close_fds(fd_in, p->fd[1], p);
+			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
+		}
+		//close_fds(p->cur_fd, p->fd[1], p);
+		p->cur_fd = p->fd[0];
 		p->cmd_num++;
 	}
-	close_fds(p->fd[0], p->fd[1], p);
+	if (close(p->fd[0]) == -1)
+	{
+		//close_fds(fd_in, p->fd[1], p);
+		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
+	}
 }
 
 int	waiting(t_pipex *p)

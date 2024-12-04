@@ -14,6 +14,7 @@
 
 void	close_fds(int fd1, int fd2, t_pipex *p)
 {
+	//ft_printf(2, "%d i %d", fd1, fd2);
 	if (close(fd1) == -1)
 		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
 	if (close(fd2) == -1)
