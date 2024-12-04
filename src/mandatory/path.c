@@ -29,7 +29,7 @@ void	handle_command(char *cmd, t_pipex *p)
 	}
 	//ft_printf(2, "---->cmd0: %s<--- \n", cmd_split[0]);
 	//ft_printf(2, "---->cmd1: %s<--- \n", cmd_split[1]);
-	///ft_printf(2, "---->path: %s<--- \n", path);
+	//ft_printf(2, "---->path: %s<--- \n", path);
 	//ft_printf(2, "envp[37]: %s\n", p->envp[37]);
 	/*for (int i = 0; p->envp[i]; i++)
 	{
@@ -68,7 +68,7 @@ static char	*make_full_path(char *one_path, char *cmd)
 	made = ft_strjoin(premade, cmd);
 	if (!made)
 		return (NULL); //clean?
-	//free(cmd);
+	//free(cmd); local copy?
 	return (made);
 }
 
@@ -99,12 +99,11 @@ char	*find_path(char **cmd_split, t_pipex *p)
 		{
 			//ft_printf(2, "---->%s<--- \n", res);
 			return (res);
-		}
-			
-		//free(res);
+		}	
+		free(res);
 		i++;
 	}
-	//clean_arr(&path);;
+	clean_arr(&path);;
 	return (NULL);
 }
 

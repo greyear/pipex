@@ -32,8 +32,8 @@ int main(int argc, char* argv[], char *envp[])
 	if (!p)
 		error_exit_code(ERR_MALLOC, EXIT_FAILURE);
 	p->argc = argc;
-	/*printf("argc: %d\n", argc);
-	for (int i = 0; i < argc; i++)
+	//printf("argc: %d\n", argc);
+	/*for (int i = 0; i < argc; i++)
     	printf("argv[%d]: %s\n", i, argv[i]);*/
 	p->argv = argv;
 	p->envp = envp;

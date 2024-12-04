@@ -31,12 +31,12 @@ static void	child(t_pipex *p)
 		fd_in = open(p->argv[1], O_RDONLY);
 		if (fd_in < 0)
 		{
-			//close_fds(p->fd[0], p->fd[1], p);
+			close_fds(p->fd[0], p->fd[1], p);
 			error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
 		}
 		if (close(p->fd[0]) == -1)
 		{
-			//close_fds(fd_in, p->fd[1], p);
+			close_fds(fd_in, p->fd[1], p);
 			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
 		}
 
@@ -50,12 +50,12 @@ static void	child(t_pipex *p)
 		fd_out = open(p->argv[p->argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd_out < 0)
 		{
-			//close_fds(p->fd[0], p->fd[1], p);
+			close_fds(p->fd[0], p->fd[1], p);
 			error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
 		}
 		if (close(p->fd[1]) == -1)
 		{
-			//close_fds(p->fd[0], fd_out, p);
+			close_fds(p->fd[0], fd_out, p);
 			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
 		}
 		
@@ -85,6 +85,7 @@ void	pipex(t_pipex *p)
 			error_clean_exit_code(ERR_FORK, EXIT_FAILURE, &p);
 		if (p->pids[p->cmd_num] == 0)
 		{
+			//printf("cmd_num: %d, p->pids[p->cmd_num]: %d\n", p->cmd_num, p->pids[p->cmd_num]);
 			child(p); //child 1 for cmd1 (right end of pipe, writing end)
 		}
 		p->cmd_num++;
@@ -102,6 +103,7 @@ int	waiting(t_pipex *p)
 	pid_counter = 0;
 	while (pid_counter < p->cmd_num)
 	{
+		//printf("pid_counter: %d, p->pids[pid_counter]: %d\n", pid_counter, p->pids[pid_counter]);
 		if (waitpid(p->pids[pid_counter], &status, 0) == -1)
 			error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
 		pid_counter++;
