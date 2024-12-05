@@ -20,17 +20,20 @@
 
 //debug: "args": ["infile", "grep a1", "wc -w", "outfile"],
 
-static void first_child(t_pipex *p)
+static int open_infile(t_pipex *p)
 {
-	p->cur_fd = open(p->argv[1], O_RDONLY);
-	if (p->cur_fd < 0)
+	int	fd_in;
+
+	fd_in = open(p->argv[1], O_RDONLY);
+	if (fd_in < 0)
 	{
 		//close_fds(p->fd[0], p->fd[1], p);
 		error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
 	}
+	return (fd_in);
 }
 
-static void	last_child(t_pipex *p)
+static int	open_outfile(t_pipex *p)
 {
 	int fd_out;
 
@@ -40,33 +43,28 @@ static void	last_child(t_pipex *p)
 		//close_fds(p->fd[0], p->fd[1], p);
 		error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
 	}
-	if (dup2(fd_out, STDOUT_FILENO) == -1)
-		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
-	if (close(fd_out) == -1)
-	{
-		ft_printf(2, "Here1");
-		//close_fds(p->fd[0], fd_out, p);
-		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
-	}
+
+	return (fd_out);
 }
 
 static void	child(t_pipex *p)
 {
+	int	fd_out;
+
+	if (p->cmd_num == 0) //the first process
+		p->cur_fd = open_infile(p);
 	if (dup2(p->cur_fd, STDIN_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
+	
 	if (p->cmd_num != p->argc - 4) //all except the last
-	{
-		if (dup2(p->fd[1], STDOUT_FILENO) == -1)
-			error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
-	}
+		fd_out = p->fd[1];	
 	else if (p->cmd_num == p->argc - 4) //the last process
-		last_child(p);
+		fd_out = open_outfile(p);
+	if (dup2(fd_out, STDOUT_FILENO) == -1)
+		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
 
-	if (close(p->fd[0]) == -1)
-	{
-		//close_fds(fd_in, p->fd[1], p);
-		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
-	}
+	close_fds(p->fd[0], fd_out, p);
+
 	handle_command(p->argv[p->cmd_num + 2], p);
 	exit(EXIT_SUCCESS);
 }
@@ -84,8 +82,6 @@ void	pipex(t_pipex *p)
 			error_clean_exit_code(ERR_FORK, EXIT_FAILURE, &p);
 		if (p->pids[p->cmd_num] == 0)
 		{
-			if (p->cmd_num == 0)
-				first_child(p);
 			child(p); //child 1 for cmd1 (right end of pipe, writing end)
 			//close_fds(p->cur_fd, p->fd[1], p);
 		}

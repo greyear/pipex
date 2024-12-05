@@ -48,11 +48,16 @@ void	clean_struct(t_pipex **p)
 {
 	if (!p || !*p)
 		return ;
+	if ((*p)->pids) //is this valid?
+	{
+		free((*p)->pids);
+		(*p)->pids = NULL;
+	}
 	//clean_arr(&((*p)->cmds));
 	/*if ((*p)->cmds)
 		clean_arr2((*p)->cmds);
 	(*p)->cmds = NULL;*/
 	// what else
-	/*free(*p);
-	*p = NULL;*/
+	free(*p);
+	*p = NULL;
 }

@@ -14,8 +14,7 @@
 
 void	args_number_error(void)
 {
-	//ft_putstr_fd("test\n", 2);
-	if (ft_putstr_fd("AAAAInvalid number of arguments\n", 2) == -1)
+	if (ft_putstr_fd("Invalid number of arguments\n", 2) == -1)
 	{
 		perror("write error");//specify?
 		exit(EXIT_FAILURE);
@@ -91,7 +90,7 @@ void	error_exit_code(char *reason, int exit_code)
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p) //do I rly need ** everywhere?
 {
 	printf("Calling clean_struct\n");
-	//clean_struct(p);
+	clean_struct(p);
 	if (p)
 		perror(reason); //why perror here and fd_putstr_fd there?
 	exit(exit_code);

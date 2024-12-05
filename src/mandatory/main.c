@@ -42,10 +42,11 @@ int main(int argc, char* argv[], char *envp[])
 		ft_printf(2, "envp[%d]: %s\n", i, p->envp[i]);
 	}*/
 	p->pids = (pid_t *)malloc((p->argc - 3) * sizeof(pid_t)); //calloc?
-	if (!p->pids)
+	if (!p->pids) //clean p
 		error_clean_exit_code(ERR_MALLOC, EXIT_FAILURE, &p);
 	//printf("Allocated p->pids for %d processes\n", p->argc - 3); //delete
 	status = waiting(p);
 	//happy path freeing
+	clean_struct(&p);
 	return (status);
 }
