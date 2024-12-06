@@ -56,13 +56,14 @@ static void	child(t_pipex *p)
 	if (dup2(p->cur_fd, STDIN_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
 	
-	if (p->cmd_num != p->argc - 4) //all except the last
-		fd_out = p->fd[1];	
-	else if (p->cmd_num == p->argc - 4) //the last process
+	if (p->cmd_num == p->argc - 4) //the last process
 		fd_out = open_outfile(p);
+	else //all except the last
+		fd_out = p->fd[1];	
 	if (dup2(fd_out, STDOUT_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
-
+	
+	ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
 	close_fds(p->fd[0], fd_out, p);
 
 	handle_command(p->argv[p->cmd_num + 2], p);
@@ -76,6 +77,8 @@ void	pipex(t_pipex *p)
 	{
 		if (pipe(p->fd) == -1)
 			error_clean_exit_code(ERR_PIPE, EXIT_FAILURE, &p);
+		//ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
+		//ft_printf(2, "---->fd1: %d<--- \n", p->fd[1]);
 
 		p->pids[p->cmd_num] = fork();
 		if (p->pids[p->cmd_num] < 0)
@@ -90,6 +93,10 @@ void	pipex(t_pipex *p)
 		p->cur_fd = p->fd[0];
 		p->cmd_num++;
 	}
+	//WHERE SHOULD IT BE????????????????????
+	/*if (p->cmds)
+        clean_arr(&(p->cmds));*/
+	//ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
 	if (close(p->fd[0]) == -1)
 	{
 		//close_fds(fd_in, p->fd[1], p);

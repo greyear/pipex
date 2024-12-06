@@ -35,9 +35,9 @@ void	execve_fail(char *reason, char *path, char **cmd_split)
 		perror("write error");//specify?
 		exit(EXIT_FAILURE);
 	}
+	clean_arr(&cmd_split);
 	free(path);
 	path = NULL; //check if I need it
-	//clean_arr(&cmd_split);
 	exit(EXIT_CMD_CANNOT_EXECUTE); //or 127?
 }
 

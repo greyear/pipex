@@ -48,5 +48,6 @@ int main(int argc, char* argv[], char *envp[])
 	status = waiting(p);
 	//happy path freeing
 	clean_struct(&p);
+	//printf("Allocated p->pids for %d processes\n", p->argc - 3); //delete
 	return (status);
 }

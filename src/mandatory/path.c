@@ -14,17 +14,18 @@
 
 void	handle_command(char *cmd, t_pipex *p)
 {
-	char	**cmd_split;
+	//char	**cmd_split;
 	char	*path;
 
-	cmd_split = split_cmd(cmd);
-	if (!cmd_split)
+	p->cmds = split_cmd(cmd);
+	if (!p->cmds)
 		return ; //clean?
-	path = find_path(cmd_split, p);
+	path = find_path(p->cmds, p);
 	//ft_printf(2, "---->%s<--- \n", *cmd_split);
 	//ft_printf(2, "---->%s<--- \n", path);
 	if (!path)
 	{
+		//clean p->cmds at least
 		return ; //error
 	}
 	/*ft_printf(2, "---->cmd0: %s<--- \n", cmd_split[0]);
@@ -36,8 +37,8 @@ void	handle_command(char *cmd, t_pipex *p)
 	{
 		ft_printf(2, "envp[%d]: %s\n", i, p->envp[i]);
 	}*/
-	execve(path, cmd_split, p->envp);
-	//execve_fail("zsh: command not found: ", path, cmd_split); //check msg
+	execve(path, p->cmds, p->envp);
+	execve_fail("zsh: command not found: ", path, p->cmds); //check msg
 }
 
 char	**path_from_envp(t_pipex *p)
