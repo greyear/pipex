@@ -41,12 +41,16 @@ void	execve_fail(char *reason, char *path, char **cmd_split)
 	exit(EXIT_CMD_CANNOT_EXECUTE); //or 127?
 }
 
-void	cmd_error(char *reason, char **cmd_split, int if_clean)
+void	cmd_error(char *reason, char **cmd_split, int if_clean, t_pipex **p)
 {
-	ft_printf(2, "Pipex: %s, %s", cmd_split[0], reason);
+	if (ft_printf(2, "Pipex: %s, %s", cmd_split[0], reason) == -1)
+	{
+		perror("write error");//specify?
+		exit(EXIT_FAILURE);
+	}
 	if (if_clean)
-		ft_putstr_fd(*cmd_split, 2);
-		//clean_arr(&cmd_split);
+		clean_struct(p);
+	//close_fds((*p)->cur_fd, (*p)->fd[1], *p);
 	exit(EXIT_CMD_NOT_FOUND);
 }
 
@@ -58,7 +62,7 @@ void	file_error(char *reason, char *file, int exit_code, t_pipex **p) // **?
 	exit(exit_code);
 }
 
-void	missing_quote(char quote)
+void	missing_quote_error(char quote)
 {
 	if (ft_printf(2, "Pipex: missing quote: %c\n", quote) == -1)
 	{
