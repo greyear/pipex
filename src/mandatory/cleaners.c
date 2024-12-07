@@ -53,12 +53,8 @@ void	clean_struct(t_pipex **p)
 		free((*p)->pids);
 		(*p)->pids = NULL;
 	}
-	if ((*p)->cmds)
-	{
-		clean_arr(&((*p)->cmds));
-		(*p)->cmds = NULL;
-	}
-		
+	/*if ((*p)->cmds)
+		clean_arr(&((*p)->cmds));*/
 	/*if ((*p)->cmds)
 		clean_arr2((*p)->cmds);
 	(*p)->cmds = NULL;*/

@@ -14,14 +14,7 @@
 #include <time.h>
 #include <string.h>
 
-void	init_p(t_pipex	*p)
-{
-	p->cmds = NULL;
-	p->cmd_num = 0;
-	p->cur_fd = -1;
-}
-
-int	main(int argc, char* argv[], char *envp[])
+int main(int argc, char* argv[], char *envp[])
 {
 	t_pipex	*p;
 	int		status;
@@ -44,7 +37,6 @@ int	main(int argc, char* argv[], char *envp[])
     	printf("argv[%d]: %s\n", i, argv[i]);*/
 	p->argv = argv;
 	p->envp = envp;
-	init_p(p);
 	/*for (int i = 0; p->envp[i]; i++)
 	{
 		ft_printf(2, "envp[%d]: %s\n", i, p->envp[i]);

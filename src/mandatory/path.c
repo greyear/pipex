@@ -25,8 +25,8 @@ void	handle_command(char *cmd, t_pipex *p)
 	//ft_printf(2, "---->%s<--- \n", path);
 	if (!path)
 	{
-		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
-		cmd_error(NO_FILE_DIR, p->cmds, 1, &p);
+		//clean p->cmds at least
+		return ; //error
 	}
 	/*ft_printf(2, "---->cmd0: %s<--- \n", cmd_split[0]);
 	ft_printf(2, "---->cmd1: %s<--- \n", cmd_split[1]);
@@ -70,8 +70,7 @@ static char	*make_full_path(char *one_path, char *cmd)
 	made = ft_strjoin(premade, cmd);
 	if (!made)
 		return (NULL); //clean?
-	//free(cmd); local copy?//p->
-	free(premade); //can I set value NULL?
+	//free(cmd); local copy?
 	return (made);
 }
 
@@ -86,10 +85,7 @@ char	*find_path(char **cmd_split, t_pipex *p)
 		if (access(cmd_split[0], F_OK) == 0)
 			return (ft_strdup(cmd_split[0]));
 		else
-		{
-			close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
-			cmd_error(NO_FILE_DIR, cmd_split, 1, &p);
-		}
+			cmd_error(NO_FILE_DIR, cmd_split, 1);
 	}
 	path = path_from_envp(p);
 	if (!path)
@@ -99,15 +95,17 @@ char	*find_path(char **cmd_split, t_pipex *p)
 	{
 		res = make_full_path(path[i], cmd_split[0]);
 		if (!res)
+			ft_printf(2, "FAILED");
 			//protection
 		if (access(res, F_OK) == 0)
 		{
+			//ft_printf(2, "---->%s<--- \n", res);
 			return (res);
 		}	
 		free(res);
 		i++;
 	}
-	clean_arr(&path);
+	clean_arr(&path);;
 	return (NULL);
 }
 

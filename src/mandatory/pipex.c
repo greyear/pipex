@@ -63,9 +63,7 @@ static void	child(t_pipex *p)
 	if (dup2(fd_out, STDOUT_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
 	
-	//ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
-	//ft_printf(2, "---->fd_out: %d<--- \n", fd_out);
-	//close(p->fd[0]);
+	ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
 	close_fds(p->fd[0], fd_out, p);
 
 	handle_command(p->argv[p->cmd_num + 2], p);
@@ -74,7 +72,7 @@ static void	child(t_pipex *p)
 
 void	pipex(t_pipex *p)
 {
-	//p->cur_fd = -1;
+	p->cur_fd = -1;
 	while (p->cmd_num < p->argc - 3)
 	{
 		if (pipe(p->fd) == -1)
@@ -95,6 +93,9 @@ void	pipex(t_pipex *p)
 		p->cur_fd = p->fd[0];
 		p->cmd_num++;
 	}
+	//WHERE SHOULD IT BE????????????????????
+	/*if (p->cmds)
+        clean_arr(&(p->cmds));*/
 	//ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
 	if (close(p->fd[0]) == -1)
 	{
@@ -108,7 +109,7 @@ int	waiting(t_pipex *p)
 	int	status;
 	int	pid_counter;
 
-	//p->cmd_num = 0;
+	p->cmd_num = 0;
 	pipex(p);
 	pid_counter = 0;
 	while (pid_counter < p->cmd_num)
