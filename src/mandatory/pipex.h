@@ -56,6 +56,7 @@ typedef struct s_pipex
 
 //Main
 void	pipex(t_pipex *p);
+void	init_p(t_pipex	*p);
 int		waiting(t_pipex *p);
 char	**path_from_envp(t_pipex *p);
 char	*find_path(char **cmd_split, t_pipex *p);
@@ -67,10 +68,10 @@ void	close_fds(int fd1, int fd2, t_pipex *p);
 
 //Errors
 void	args_number_error(void);
-void	execve_fail(char *reason, char *path, char **cmd_split);
-void	cmd_error(char *reason, char **cmd_split, int if_clean);
+void	execve_fail(char *reason, char *path, char **cmd_split, t_pipex **p);
+void	cmd_error(char *reason, char *cmd, int if_clean, t_pipex **p);
 void	file_error(char *reason, char *file, int exit_code, t_pipex **p);
-void	missing_quote(char quote);
+void	missing_quote_error(char quote);
 void	error_code(char *reason);
 void	error_exit_code(char *reason, int exit_code);
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p);

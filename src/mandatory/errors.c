@@ -23,14 +23,14 @@ void	args_number_error(void)
 	exit(EXIT_FAILURE);
 }
 
-void	execve_fail(char *reason, char *path, char **cmd_split)
+void	execve_fail(char *reason, char *path, char **cmd_split, t_pipex **p)
 {
-	if (ft_putstr_fd(reason, 2) == -1)
+	if (ft_putstr_fd(cmd_split[0], 2) == -1)
 	{
 		perror("write error");//specify?
 		exit(EXIT_FAILURE);
 	}
-	if (ft_putstr_fd(*cmd_split, 2) == -1)
+	if (ft_putstr_fd(reason, 2) == -1)
 	{
 		perror("write error");//specify?
 		exit(EXIT_FAILURE);
@@ -38,15 +38,21 @@ void	execve_fail(char *reason, char *path, char **cmd_split)
 	clean_arr(&cmd_split);
 	free(path);
 	path = NULL; //check if I need it
+	//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+	clean_struct(p);
 	exit(EXIT_CMD_CANNOT_EXECUTE); //or 127?
 }
 
-void	cmd_error(char *reason, char **cmd_split, int if_clean)
+void	cmd_error(char *reason, char *cmd, int if_clean, t_pipex **p)
 {
-	ft_printf(2, "Pipex: %s, %s", cmd_split[0], reason);
+	if (ft_printf(2, "Pipex: %s, %s", cmd, reason) == -1)
+	{
+		perror("write error");//specify?
+		exit(EXIT_FAILURE);
+	}
 	if (if_clean)
-		ft_putstr_fd(*cmd_split, 2);
-		//clean_arr(&cmd_split);
+		clean_struct(p);
+	//close_fds((*p)->cur_fd, (*p)->fd[1], *p);
 	exit(EXIT_CMD_NOT_FOUND);
 }
 
@@ -58,7 +64,7 @@ void	file_error(char *reason, char *file, int exit_code, t_pipex **p) // **?
 	exit(exit_code);
 }
 
-void	missing_quote(char quote)
+void	missing_quote_error(char quote)
 {
 	if (ft_printf(2, "Pipex: missing quote: %c\n", quote) == -1)
 	{

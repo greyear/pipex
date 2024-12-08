@@ -28,7 +28,7 @@ static int	length_inside_quotes(char *str)
 		str++;
 	}
 	if (*str != any_quote)
-		missing_quote(any_quote);
+		missing_quote_error(any_quote);
 	return (len);
 }
 

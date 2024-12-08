@@ -19,14 +19,19 @@ void	handle_command(char *cmd, t_pipex *p)
 
 	p->cmds = split_cmd(cmd);
 	if (!p->cmds)
+	{
+		//ft_printf(2, "CMD BROKE:>%s<\n", *cmd);
+		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+		cmd_error(NO_FILE_DIR, cmd, 1, &p); //The error msg in real bash looks different, it says about the previous one
 		return ; //clean?
+	}
 	path = find_path(p->cmds, p);
 	//ft_printf(2, "---->%s<--- \n", *cmd_split);
 	//ft_printf(2, "---->%s<--- \n", path);
 	if (!path)
 	{
-		//clean p->cmds at least
-		return ; //error
+		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+		cmd_error(NO_FILE_DIR, p->cmds[0], 1, &p);
 	}
 	/*ft_printf(2, "---->cmd0: %s<--- \n", cmd_split[0]);
 	ft_printf(2, "---->cmd1: %s<--- \n", cmd_split[1]);
@@ -38,7 +43,8 @@ void	handle_command(char *cmd, t_pipex *p)
 		ft_printf(2, "envp[%d]: %s\n", i, p->envp[i]);
 	}*/
 	execve(path, p->cmds, p->envp);
-	execve_fail("zsh: command not found: ", path, p->cmds); //check msg
+	close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+	execve_fail("command not found: ", path, p->cmds, &p); //check msg
 }
 
 char	**path_from_envp(t_pipex *p)
@@ -71,6 +77,7 @@ static char	*make_full_path(char *one_path, char *cmd)
 	if (!made)
 		return (NULL); //clean?
 	//free(cmd); local copy?
+	free(premade);
 	return (made);
 }
 
@@ -85,7 +92,10 @@ char	*find_path(char **cmd_split, t_pipex *p)
 		if (access(cmd_split[0], F_OK) == 0)
 			return (ft_strdup(cmd_split[0]));
 		else
-			cmd_error(NO_FILE_DIR, cmd_split, 1);
+		{
+			close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+			cmd_error(NO_FILE_DIR, cmd_split[0], 1, &p);
+		}
 	}
 	path = path_from_envp(p);
 	if (!path)
@@ -95,7 +105,7 @@ char	*find_path(char **cmd_split, t_pipex *p)
 	{
 		res = make_full_path(path[i], cmd_split[0]);
 		if (!res)
-			ft_printf(2, "FAILED");
+			ft_printf(2, "res allocation failed");
 			//protection
 		if (access(res, F_OK) == 0)
 		{
@@ -105,7 +115,7 @@ char	*find_path(char **cmd_split, t_pipex *p)
 		free(res);
 		i++;
 	}
-	clean_arr(&path);;
+	clean_arr(&path);
 	return (NULL);
 }
 
