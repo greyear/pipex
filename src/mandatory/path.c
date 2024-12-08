@@ -20,16 +20,17 @@ void	handle_command(char *cmd, t_pipex *p)
 	p->cmds = split_cmd(cmd);
 	if (!p->cmds)
 	{
-		//ft_printf(2, "CMD BROKE:>%s<\n", *cmd);
+		//ft_printf(2, "CMD BROKE:>%s<\n", cmd);
 		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 		cmd_error(NO_FILE_DIR, cmd, 1, &p); //The error msg in real bash looks different, it says about the previous one
 		return ; //clean?
 	}
 	path = find_path(p->cmds, p);
 	//ft_printf(2, "---->%s<--- \n", *cmd_split);
-	//ft_printf(2, "---->%s<--- \n", path);
 	if (!path)
 	{
+		ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
+		ft_printf(2, "cmd %d: CLOSE WHICH CAUSES PROBLEMS: cur_fd: %d and fd1: %d\n", p->cmd_num, p->cur_fd, p->fd[1]);
 		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 		cmd_error(NO_FILE_DIR, p->cmds[0], 1, &p);
 	}
@@ -43,7 +44,10 @@ void	handle_command(char *cmd, t_pipex *p)
 		ft_printf(2, "envp[%d]: %s\n", i, p->envp[i]);
 	}*/
 	execve(path, p->cmds, p->envp);
+	//ft_printf(2, "EXECVE FAILED with path---->%s<--- \n", path);
 	close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+	//free(path);
+	//path = NULL;
 	execve_fail("command not found: ", path, p->cmds, &p); //check msg
 }
 
@@ -99,17 +103,24 @@ char	*find_path(char **cmd_split, t_pipex *p)
 	}
 	path = path_from_envp(p);
 	if (!path)
+	{
+		//ft_printf(2, "PATH FROM ENVP BROKE:>%s<\n", cmd_split[0]);
 		return (NULL); //clean?
+	}
 	i = 0;
 	while (path[i])
 	{
 		res = make_full_path(path[i], cmd_split[0]);
 		if (!res)
-			ft_printf(2, "res allocation failed");
-			//protection
+		{
+			clean_arr(&path);
+			error_clean_exit_code(ERR_MALLOC, EXIT_FAILURE, &p);
+		}
 		if (access(res, F_OK) == 0)
 		{
-			//ft_printf(2, "---->%s<--- \n", res);
+			//ft_printf(2, "ACCESS---->%s<--- \n", res);
+			//ft_printf(2, "PATH---->%s<--- \n", path[0]);
+			clean_arr(&path);
 			return (res);
 		}	
 		free(res);

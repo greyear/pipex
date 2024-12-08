@@ -20,7 +20,7 @@
 
 //debug: "args": ["infile", "grep a1", "wc -w", "outfile"],
 
-static int open_infile(t_pipex *p)
+static int	open_infile(t_pipex *p)
 {
 	int	fd_in;
 
@@ -52,18 +52,30 @@ static void	child(t_pipex *p)
 	int	fd_out;
 
 	if (p->cmd_num == 0) //the first process
+	{
 		p->cur_fd = open_infile(p);
+		ft_printf(2, "cmd: %d: cur_fd opened in 1st process: %d\n", p->cmd_num, p->cur_fd);
+	}
 	if (dup2(p->cur_fd, STDIN_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
 	
 	if (p->cmd_num == p->argc - 4) //the last process
+	{
 		fd_out = open_outfile(p);
-	else //all except the last
+		ft_printf(2, "cmd: %d: fd_out turned into: %d\n", p->cmd_num, fd_out);
+	}
+		
+	else  //all except the last
+	{
 		fd_out = p->fd[1];	
+		ft_printf(2, "cmd: %d: fd_out turned into: %d\n", p->cmd_num, fd_out);
+	}
+
 	if (dup2(fd_out, STDOUT_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
 	
-	//ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
+	ft_printf(2, "cmd: %d: will close before exec: fd0: %d\n", p->cmd_num, p->fd[0]);
+	ft_printf(2, "cmd: %d: will close before exec: fd_out: %d\n", p->cmd_num, fd_out);
 	close_fds(p->fd[0], fd_out, p);
 
 	handle_command(p->argv[p->cmd_num + 2], p);
@@ -77,8 +89,8 @@ void	pipex(t_pipex *p)
 	{
 		if (pipe(p->fd) == -1)
 			error_clean_exit_code(ERR_PIPE, EXIT_FAILURE, &p);
-		//ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
-		//ft_printf(2, "---->fd1: %d<--- \n", p->fd[1]);
+		ft_printf(2, "cmd: %d: fd0 opened after pipe: %d\n", p->cmd_num, p->fd[0]);
+		ft_printf(2, "cmd: %d: fd1 opened after pipe: %d\n", p->cmd_num, p->fd[1]);
 
 		p->pids[p->cmd_num] = fork();
 		if (p->pids[p->cmd_num] < 0)
@@ -89,15 +101,17 @@ void	pipex(t_pipex *p)
 			//close_fds(p->cur_fd, p->fd[1], p);
 		}
 
+		printf("cmd: %d: cur_fd will be closed after child: %d\n", p->cmd_num, p->cur_fd);
+		printf("cmd: %d: fd1 will be closed after child: %d\n", p->cmd_num, p->fd[1]);
+		fflush(stdout);
 		close_fds(p->cur_fd, p->fd[1], p);
 		p->cur_fd = p->fd[0];
+		ft_printf(2, "cmd: %d: cur_fd has turned into: %d at the end of pipex\n", p->cmd_num, p->cur_fd);
 		p->cmd_num++;
 	}
-	//WHERE SHOULD IT BE????????????????????
-	/*if (p->cmds)
-        clean_arr(&(p->cmds));*/
 	//ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
-	if (close(p->fd[0]) == -1)
+	//if (close(p->fd[0]) == -1)
+	if (close(p->cur_fd) == -1)
 	{
 		//close_fds(fd_in, p->fd[1], p);
 		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
