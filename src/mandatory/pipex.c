@@ -27,7 +27,7 @@ static int	open_infile(t_pipex *p)
 	fd_in = open(p->argv[1], O_RDONLY);
 	if (fd_in < 0)
 	{
-		//close_fds(p->fd[0], p->fd[1], p);
+		close_fds(p->fd[0], p->fd[1], p);
 		error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
 	}
 	return (fd_in);
@@ -40,7 +40,9 @@ static int	open_outfile(t_pipex *p)
 	fd_out = open(p->argv[p->argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd_out < 0)
 	{
-		//close_fds(p->fd[0], p->fd[1], p);
+		close_fds(p->fd[0], p->fd[1], p);
+		if (close(p->cur_fd) == -1)
+			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
 		error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
 	}
 
@@ -58,26 +60,6 @@ static void	child(t_pipex *p)
 	}
 	if (dup2(p->cur_fd, STDIN_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
-	/*
-	if (p->cmd_num == p->argc - 4) //the last process
-	{
-		fd_out = open_outfile(p);
-		ft_printf(2, "cmd: %d: fd_out opened outfile: %d\n", p->cmd_num, fd_out);
-	}
-		
-	else  //all except the last
-	{
-		fd_out = p->fd[1];	
-		ft_printf(2, "cmd: %d: fd_out turned into fd1: %d\n", p->cmd_num, fd_out);
-	}
-
-	if (dup2(fd_out, STDOUT_FILENO) == -1)
-		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
-	
-	printf("cmd: %d: will close before exec: fd0: %d\n", p->cmd_num, p->fd[0]);
-	printf("cmd: %d: will close before exec: fd_out: %d\n", p->cmd_num, fd_out);
-	fflush(stdout);
-	close_fds(p->fd[0], fd_out, p);*/
 
 	if (p->cmd_num == p->argc - 4) //the last process
 	{
@@ -104,10 +86,7 @@ static void	child(t_pipex *p)
 	
 	//fflush(stdout);
 	if (close(p->fd[0]) == -1)
-	{
-		//close_fds(fd_in, p->fd[1], p);
 		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
-	}
 
 	handle_command(p->argv[p->cmd_num + 2], p);
 	exit(EXIT_SUCCESS);
@@ -142,11 +121,8 @@ void	pipex(t_pipex *p)
 	}
 	//ft_printf(2, "---->fd0: %d<--- \n", p->fd[0]);
 	//if (close(p->fd[0]) == -1)
-	if (close(p->cur_fd) == -1) //fd0?
-	{
-		//close_fds(fd_in, p->fd[1], p);
+	if (close(p->cur_fd) == -1)
 		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
-	}
 }
 
 int	waiting(t_pipex *p)

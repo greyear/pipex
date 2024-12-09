@@ -94,7 +94,7 @@ void	error_exit_code(char *reason, int exit_code)
 
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p) //do I rly need ** everywhere?
 {
-	printf("Calling clean_struct\n");
+	//printf("Calling clean_struct\n");
 	clean_struct(p);
 	if (p)
 		perror(reason); //why perror here and fd_putstr_fd there?
