@@ -32,7 +32,6 @@ void	close_fds(int fd1, int fd2, t_pipex *p)
 			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
 		}
 	}
-	
 }
 
 //vot slomalsya perviy close, i chto so vtorym?

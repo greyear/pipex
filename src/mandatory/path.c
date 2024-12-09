@@ -29,8 +29,8 @@ void	handle_command(char *cmd, t_pipex *p)
 	//ft_printf(2, "---->%s<--- \n", *cmd_split);
 	if (!path)
 	{
-		ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
-		ft_printf(2, "cmd %d: CLOSE WHICH CAUSES PROBLEMS: cur_fd: %d and fd1: %d\n", p->cmd_num, p->cur_fd, p->fd[1]);
+		//ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
+		//ft_printf(2, "cmd %d: CLOSE WHICH CAUSES PROBLEMS: cur_fd: %d and fd1: %d\n", p->cmd_num, p->cur_fd, p->fd[1]);
 		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 		cmd_error(NO_FILE_DIR, p->cmds[0], 1, &p);
 	}
