@@ -36,7 +36,7 @@
 # define NO_FILE_DIR "no such file or directory"
 # define ZSH_NO_FILE "zsh: no such file or directory:"
 # define CMD_NOT_FOUND "zsh: command not found:"
-# define ZSH_PERM "zsh: permission denied:"
+# define PERM_DENIED "zsh: permission denied:"
 
 # define EXIT_CMD_CANNOT_EXECUTE 126
 # define EXIT_CMD_NOT_FOUND 127

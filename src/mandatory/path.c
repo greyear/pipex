@@ -20,27 +20,32 @@ void	handle_command(char *cmd, t_pipex *p)
 	p->cmds = split_cmd(cmd);
 	if (!p->cmds)
 	{
-		//ft_printf(2, "CMD BROKE:>%s<\n", cmd);
+		ft_printf(2, "CMD BROKE:>%s<\n", cmd);
 		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 		cmd_error(CMD_NOT_FOUND, cmd, 1, &p); //The error msg in real bash looks different, it says about the previous one
 		return ; //clean?
 	}
 	path = find_path(p->cmds, p);
-	//ft_printf(2, "---->%s<--- \n", *cmd_split);
+	ft_printf(2, "PATH---->%s<--- \n", path);
 	if (!path)
 	{
-		//ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
+		ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
 		//ft_printf(2, "cmd %d: CLOSE WHICH CAUSES PROBLEMS: cur_fd: %d and fd1: %d\n", p->cmd_num, p->cur_fd, p->fd[1]);
 		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 		cmd_error(CMD_NOT_FOUND, p->cmds[0], 1, &p);
 	}
 	execve(path, p->cmds, p->envp);
-	//ft_printf(2, "EXECVE FAILED with path---->%s<--- \n", path);
+	ft_printf(2, "EXECVE FAILED with path---->%s<--- \n", path);
 	close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 	//free(path);
 	//path = NULL;
 	execve_fail(CMD_NOT_FOUND, path, p->cmds, &p); //check msg
 }
+
+//if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1) - "Permission denied".
+//if (ppx->cmd_args[0] && ft_strncmp(ppx->cmd_args[0], "exit", 4) == 0) - exit(ft_atoi(ppx->cmd_args[1]));
+
+
 
 char	**path_from_envp(t_pipex *p)
 {
@@ -91,7 +96,7 @@ char	*find_path(char **cmd_split, t_pipex *p)
 			return (ft_strdup(cmd_split[0]));
 		else
 		{
-			//ft_printf(2, "ACCESS IS NOT 0:>%s<\n", cmd_split[0]);
+			ft_printf(2, "ACCESS IS NOT 0:>%s<\n", cmd_split[0]);
 			close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 			cmd_error(NO_FILE_DIR, cmd_split[0], 1, &p);
 		}
