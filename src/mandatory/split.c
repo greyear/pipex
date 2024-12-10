@@ -35,7 +35,6 @@ static int	length_inside_quotes(char *str)
 static int	word_length(char *str)
 {
 	int	len;
-	//if
 
 	len = 0;
 	while (*str && *str != ' ' && *str != '\'' && *str != '\"')
@@ -107,7 +106,7 @@ static char	*one_word(char *str, int len)
 	return (word);
 }
 //from now on needs to be improved and rewritten
-static char **all_words(char *str, int count)
+static char	**all_words(char *str, int count)
 {
 	int		w;
 	int		len;

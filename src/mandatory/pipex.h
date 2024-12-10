@@ -24,18 +24,19 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-# define ERR_WRITE "Write function failed"
-# define ERR_MALLOC "Memory allocation failed"
-# define ERR_FORK "Fork function failed"
-# define ERR_PIPE "Pipe creation failed"
-# define ERR_DUP2 "Dup2 function failed"
-# define ERR_WAITPID "Waitpid function failed"
-# define ERR_EXECVE "Execve failed"
-# define ERR_OPEN "Opening failed" //do I need to specify?
-# define ERR_CLOSE "Closing failed"
-# define NO_FILE_DIR "No such file or directory"
-# define ZSH_NO_FILE "zsh: no such file or directory: "
-# define ZSH_PERM "zsh: permission denied: "
+# define ERR_WRITE "write function failed"
+# define ERR_MALLOC "memory allocation failed"
+# define ERR_FORK "fork function failed"
+# define ERR_PIPE "pipe creation failed"
+# define ERR_DUP2 "dup2 function failed"
+# define ERR_WAITPID "waitpid function failed"
+# define ERR_EXECVE "execve failed"
+# define ERR_OPEN "opening failed" //do I need to specify?
+# define ERR_CLOSE "closing failed"
+# define NO_FILE_DIR "no such file or directory"
+# define ZSH_NO_FILE "zsh: no such file or directory:"
+# define CMD_NOT_FOUND "zsh: command not found:"
+# define ZSH_PERM "zsh: permission denied:"
 
 # define EXIT_CMD_CANNOT_EXECUTE 126
 # define EXIT_CMD_NOT_FOUND 127

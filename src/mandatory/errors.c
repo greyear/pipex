@@ -18,21 +18,22 @@ void	args_number_error(void)
 	{
 		perror("write error");//specify?
 		exit(EXIT_FAILURE);
-	}		
-	//perror()
+	}
 	exit(EXIT_FAILURE);
 }
+
+//do we need to write pipex in error messages?
 
 void	execve_fail(char *reason, char *path, char **cmd_split, t_pipex **p)
 {
 	if (ft_putstr_fd(cmd_split[0], 2) == -1)
 	{
-		perror("write error");//specify?
+		perror("write error");
 		exit(EXIT_FAILURE);
 	}
 	if (ft_putstr_fd(reason, 2) == -1)
 	{
-		perror("write error");//specify?
+		perror("write error");
 		exit(EXIT_FAILURE);
 	}
 	free(path);
@@ -44,9 +45,9 @@ void	execve_fail(char *reason, char *path, char **cmd_split, t_pipex **p)
 
 void	cmd_error(char *reason, char *cmd, int if_clean, t_pipex **p)
 {
-	if (ft_printf(2, "Pipex: %s, %s", cmd, reason) == -1)
+	if (ft_printf(2, "%s %s\n", reason, cmd) == -1)
 	{
-		perror("write error");//specify?
+		perror("write error");
 		exit(EXIT_FAILURE);
 	}
 	if (if_clean)
@@ -58,7 +59,7 @@ void	cmd_error(char *reason, char *cmd, int if_clean, t_pipex **p)
 void	file_error(char *reason, char *file, int exit_code, t_pipex **p) // **?
 {
 	if (p)
-		ft_printf(2, "Pipex: %s, %s", reason, file);
+		ft_printf(2, "%s %s", reason, file);
 	//clean_struct(p);
 	exit(exit_code);
 }
@@ -67,7 +68,7 @@ void	missing_quote_error(char quote)
 {
 	if (ft_printf(2, "Pipex: missing quote: %c\n", quote) == -1)
 	{
-		perror("write error");//specify?
+		perror("write error");
 		exit(EXIT_FAILURE);
 	}
 	exit(EXIT_FAILURE);
@@ -77,7 +78,7 @@ void	error_code(char *reason)
 {
 	if (ft_putstr_fd(reason, 2) == -1)
 	{
-		perror("write error");//specify?
+		perror("write error");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -86,7 +87,7 @@ void	error_exit_code(char *reason, int exit_code)
 {
 	if (ft_putstr_fd(reason, 2) == -1)
 	{
-		perror("write error");//specify?
+		perror("write error");
 		exit(EXIT_FAILURE);
 	}
 	exit(exit_code);
@@ -94,7 +95,6 @@ void	error_exit_code(char *reason, int exit_code)
 
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p) //do I rly need ** everywhere?
 {
-	//printf("Calling clean_struct\n");
 	clean_struct(p);
 	if (p)
 		perror(reason); //why perror here and fd_putstr_fd there?

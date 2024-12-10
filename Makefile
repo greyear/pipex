@@ -61,7 +61,6 @@ NC				=	\033[0m
 
 # Build rules
 all:				$(NAME)
-					@echo "$(GREEN)--> Created pipex!$(NC)"
 
 $(LIBFT):			
 					@make -C $(LIBFT_DIR)
@@ -70,7 +69,9 @@ $(NAME):			.mandatory
 
 .mandatory:			$(MAN_OBJ) $(LIBFT)
 					@$(CC) $(CFLAGS) $(MAN_OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME)
-					@$(RM) -r .bonus
+					@touch $@
+					@echo "$(GREEN)--> Created pipex!$(NC)"
+# @$(RM) -r .bonus - should I delete it here?
 
 bonus:				.bonus
 					@echo "$(GREEN)--> Created pipex_bonus!$(NC)"

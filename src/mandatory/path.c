@@ -22,7 +22,7 @@ void	handle_command(char *cmd, t_pipex *p)
 	{
 		//ft_printf(2, "CMD BROKE:>%s<\n", cmd);
 		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
-		cmd_error(NO_FILE_DIR, cmd, 1, &p); //The error msg in real bash looks different, it says about the previous one
+		cmd_error(CMD_NOT_FOUND, cmd, 1, &p); //The error msg in real bash looks different, it says about the previous one
 		return ; //clean?
 	}
 	path = find_path(p->cmds, p);
@@ -32,23 +32,14 @@ void	handle_command(char *cmd, t_pipex *p)
 		//ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
 		//ft_printf(2, "cmd %d: CLOSE WHICH CAUSES PROBLEMS: cur_fd: %d and fd1: %d\n", p->cmd_num, p->cur_fd, p->fd[1]);
 		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
-		cmd_error(NO_FILE_DIR, p->cmds[0], 1, &p);
+		cmd_error(CMD_NOT_FOUND, p->cmds[0], 1, &p);
 	}
-	/*ft_printf(2, "---->cmd0: %s<--- \n", cmd_split[0]);
-	ft_printf(2, "---->cmd1: %s<--- \n", cmd_split[1]);
-	ft_printf(2, "---->cmd2: %s<--- \n", cmd_split[2]);
-	ft_printf(2, "---->path: %s<--- \n", path);
-	ft_printf(2, "envp[37]: %s\n", p->envp[37]);
-	for (int i = 0; p->envp[i]; i++)
-	{
-		ft_printf(2, "envp[%d]: %s\n", i, p->envp[i]);
-	}*/
 	execve(path, p->cmds, p->envp);
 	//ft_printf(2, "EXECVE FAILED with path---->%s<--- \n", path);
 	close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 	//free(path);
 	//path = NULL;
-	execve_fail("command not found: ", path, p->cmds, &p); //check msg
+	execve_fail(CMD_NOT_FOUND, path, p->cmds, &p); //check msg
 }
 
 char	**path_from_envp(t_pipex *p)
@@ -56,7 +47,7 @@ char	**path_from_envp(t_pipex *p)
 	int	i;
 
 	if (!p->envp)
-		return (0);
+		return (0); //should I throw an error here?
 	i = 0;
 	while (p->envp[i])
 	{
@@ -76,10 +67,13 @@ static char	*make_full_path(char *one_path, char *cmd)
 
 	premade = ft_strjoin(one_path, "/");
 	if (!premade)
-		return (NULL); //clean?
+		return (NULL);
 	made = ft_strjoin(premade, cmd);
 	if (!made)
-		return (NULL); //clean?
+	{
+		free(premade);
+		return (NULL);
+	}
 	//free(cmd); local copy?
 	free(premade);
 	return (made);
@@ -97,6 +91,7 @@ char	*find_path(char **cmd_split, t_pipex *p)
 			return (ft_strdup(cmd_split[0]));
 		else
 		{
+			//ft_printf(2, "ACCESS IS NOT 0:>%s<\n", cmd_split[0]);
 			close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 			cmd_error(NO_FILE_DIR, cmd_split[0], 1, &p);
 		}
@@ -130,7 +125,6 @@ char	*find_path(char **cmd_split, t_pipex *p)
 	return (NULL);
 }
 
-
 /*
 Взяли команду как строку, разделили ее по словам, сделали массив: "ls -l /home" становится ["ls", "-l", "/home"].
 Проверили, есть ли в этом массиве / (путь )
@@ -150,25 +144,4 @@ char	*find_path(char **cmd_split, t_pipex *p)
 Всё освободили
 
 В итоге вызвали execve с аргументами: итоговый путь, разделенная команда как массив строк, envp 
-
-/usr/local/sbin:
-/usr/local/bin:
-/usr/sbin:
-/usr/bin:
-/sbin:
-/bin:
-/snap/bin
-
-
-/usr/local/bin:
-/usr/bin:
-/bin:
-/usr/sbin:
-/sbin
-
-
-/bin:
-/usr/bin:
-/sbin:
-/usr/sbin:
-/usr/local/bin*/
+*/

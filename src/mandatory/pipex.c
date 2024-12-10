@@ -37,13 +37,16 @@ static int	open_outfile(t_pipex *p)
 {
 	int fd_out;
 
+	//check_second_file(p);
 	fd_out = open(p->argv[p->argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd_out < 0)
 	{
 		close_fds(p->fd[0], p->fd[1], p);
 		if (close(p->cur_fd) == -1)
 			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
+		//ft_printf(2, "cmd: %d: ERR_OPEN\n", p->cmd_num);
 		error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
+		//file_error(PERM_DENIED, p->argv[p->argc - 1], 1, &p); //1?
 	}
 
 	return (fd_out);
