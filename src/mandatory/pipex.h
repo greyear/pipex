@@ -66,6 +66,8 @@ void	handle_command(char *cmd, t_pipex *p);
 
 //Utils
 void	close_fds(int fd1, int fd2, t_pipex *p);
+int		length_inside_quotes(char *str);
+int		word_length(char *str);
 
 //Errors
 void	args_number_error(void);

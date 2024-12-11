@@ -26,14 +26,14 @@ void	clean_arr(char ***arr)
 		}
 		free(*arr);
 		*arr = NULL;
-	}	
+	}
 }
 
 void	clean_struct(t_pipex **p)
 {
 	if (!p || !*p)
 		return ;
-	if ((*p)->pids) //is this valid?
+	if ((*p)->pids)
 	{
 		free((*p)->pids);
 		(*p)->pids = NULL;
@@ -43,7 +43,6 @@ void	clean_struct(t_pipex **p)
 		clean_arr(&((*p)->cmds));
 		(*p)->cmds = NULL;
 	}
-	// what else
 	free(*p);
 	*p = NULL;
 }

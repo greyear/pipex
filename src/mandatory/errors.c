@@ -93,7 +93,6 @@ void	error_exit_code(char *reason, int exit_code)
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p) //do I rly need ** everywhere?
 {
 	clean_struct(p);
-	if (p)
-		perror(reason); //why perror here and fd_putstr_fd there?
+	perror(reason); //why perror here and fd_putstr_fd there?
 	exit(exit_code);
 }

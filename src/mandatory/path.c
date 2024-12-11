@@ -43,8 +43,6 @@ void	handle_command(char *cmd, t_pipex *p)
 //if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1) - "Permission denied".
 //if (ppx->cmd_args[0] && ft_strncmp(ppx->cmd_args[0], "exit", 4) == 0) - exit(ft_atoi(ppx->cmd_args[1]));
 
-
-
 char	**path_from_envp(t_pipex *p)
 {
 	int	i;
@@ -77,7 +75,6 @@ static char	*make_full_path(char *one_path, char *cmd)
 		free(premade);
 		return (NULL);
 	}
-	//free(cmd); local copy?
 	free(premade);
 	return (made);
 }

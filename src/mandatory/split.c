@@ -12,48 +12,8 @@
 
 #include "pipex.h"
 
-static int	length_inside_quotes(char *str)
-{
-	char	any_quote;
-	int		len;
-
-	if (!str || (*str != '\'' && *str != '\"'))
-		return (0);
-	any_quote = *str;
-	len = 0;
-	str++;
-	while (*str != '\0' && *str != any_quote)
-	{
-		len++;
-		str++;
-	}
-	if (*str != any_quote)
-		missing_quote_error(any_quote);
-	return (len);
-}
-
-static int	word_length(char *str)
-{
-	int	len;
-
-	len = 0;
-	while (*str && *str != ' ' && *str != '\'' && *str != '\"')
-	{
-		if (*str == '\\' && *(str + 1) != '\0')
-		{
-			len += 2;
-			str += 2;
-		}
-		else
-		{
-			len++;
-			str++;
-		}
-	}
-	return (len);
-}
-
-//check the case with "\\ \\ \\ \\ ". Mine gives result 1, chatgpt thinks it should be 4
+//check the case with "\\ \\ \\ \\ ".
+//Mine gives 1, chatgpt thinks it should be 4
 static int	count_words(char *str)
 {
 	int	i;
@@ -105,7 +65,7 @@ static char	*one_word(char *str, int len)
 	word[j] = '\0';
 	return (word);
 }
-//from now on needs to be improved and rewritten
+
 static char	**all_words(char *str, int count)
 {
 	int		w;
@@ -133,7 +93,6 @@ static char	**all_words(char *str, int count)
 		str += len;
 		w++;
 	}
-	//array[count] = 0; //do we need it if I used calloc?
 	return (array);
 }
 
@@ -145,18 +104,10 @@ char	**split_cmd(char *cmd)
 	if (!cmd || *cmd == '\0')
 		return (NULL);
 	count = count_words(cmd);
-	if (count == 0) //do I need it?
+	if (count == 0)
 		return (NULL);
 	res = all_words(cmd, count);
 	if (!res)
 		return (NULL);
 	return (res);
 }
-/*
-int	main(void)
-{
-	char *str;
-
-	str = "\\ \\ \\ \\ ";
-	printf("words in a string: %d\n", count_words(str));
-}*/

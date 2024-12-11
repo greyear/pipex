@@ -36,7 +36,7 @@ int	main(int argc, char *argv[], char *envp[])
 	p->envp = envp;
 	init_p(p);
 	p->pids = (pid_t *)malloc((p->argc - 3) * sizeof(pid_t)); //calloc?
-	if (!p->pids) //clean p
+	if (!p->pids)
 		error_clean_exit_code(ERR_MALLOC, EXIT_FAILURE, &p);
 	status = waiting(p);
 	clean_struct(&p);
