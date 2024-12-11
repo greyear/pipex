@@ -20,26 +20,24 @@ void	handle_command(char *cmd, t_pipex *p)
 	p->cmds = split_cmd(cmd);
 	if (!p->cmds)
 	{
-		ft_printf(2, "CMD BROKE:>%s<\n", cmd);
-		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
-		cmd_error(CMD_NOT_FOUND, cmd, 1, &p); //The error msg in real bash looks different, it says about the previous one
+		//ft_printf(2, "CMD BROKE:>%s<\n", cmd);
+		//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+		cmd_error(CMD_NOT_FOUND, cmd, EXIT_CMD_NOT_FOUND, &p); //The error msg in real bash looks different, it says about the previous one
 		return ; //clean?
 	}
 	path = find_path(p->cmds, p);
-	ft_printf(2, "PATH---->%s<--- \n", path);
+	//ft_printf(2, "PATH---->%s<--- \n", path);
 	if (!path)
 	{
-		ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
+		//ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
 		//ft_printf(2, "cmd %d: CLOSE WHICH CAUSES PROBLEMS: cur_fd: %d and fd1: %d\n", p->cmd_num, p->cur_fd, p->fd[1]);
-		close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
-		cmd_error(CMD_NOT_FOUND, p->cmds[0], 1, &p);
+		//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+		cmd_error(CMD_NOT_FOUND, p->cmds[0], EXIT_CMD_NOT_FOUND, &p);
 	}
 	execve(path, p->cmds, p->envp);
-	ft_printf(2, "EXECVE FAILED with path---->%s<--- \n", path);
-	close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
-	//free(path);
-	//path = NULL;
-	execve_fail(CMD_NOT_FOUND, path, p->cmds, &p); //check msg
+	//ft_printf(2, "EXECVE FAILED with path---->%s<--- \n", path);
+	//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+	execve_fail(path, p->cmds, &p); //check msg
 }
 
 //if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1) - "Permission denied".
@@ -93,12 +91,16 @@ char	*find_path(char **cmd_split, t_pipex *p)
 	if (ft_strchr(cmd_split[0], '/') != NULL)
 	{
 		if (access(cmd_split[0], F_OK) == 0)
+		{
+			if (access(cmd_split[0], X_OK) == -1)
+				cmd_error(PERM_DENIED, cmd_split[0], EXIT_CMD_CANNOT_EXECUTE, &p);
 			return (ft_strdup(cmd_split[0]));
+		}
 		else
 		{
-			ft_printf(2, "ACCESS IS NOT 0:>%s<\n", cmd_split[0]);
-			close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
-			cmd_error(NO_FILE_DIR, cmd_split[0], 1, &p);
+			//ft_printf(2, "ACCESS IS NOT 0:>%s<\n", cmd_split[0]);
+			//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
+			cmd_error(NO_FILE_DIR, cmd_split[0], EXIT_CMD_NOT_FOUND, &p);
 		}
 	}
 	path = path_from_envp(p);

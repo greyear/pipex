@@ -69,8 +69,8 @@ void	close_fds(int fd1, int fd2, t_pipex *p);
 
 //Errors
 void	args_number_error(void);
-void	execve_fail(char *reason, char *path, char **cmd_split, t_pipex **p);
-void	cmd_error(char *reason, char *cmd, int if_clean, t_pipex **p);
+void	execve_fail(char *path, char **cmd_split, t_pipex **p);
+void	cmd_error(char *reason, char *cmd, int exit_code, t_pipex **p);
 void	file_error(char *reason, char *file, int exit_code, t_pipex **p);
 void	missing_quote_error(char quote);
 void	error_code(char *reason);

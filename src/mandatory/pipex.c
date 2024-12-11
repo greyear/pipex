@@ -63,6 +63,9 @@ static void	child(t_pipex *p)
 	}
 	if (dup2(p->cur_fd, STDIN_FILENO) == -1)
 		error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
+	if (p->cmd_num == 0)
+		close(p->cur_fd);
+		
 
 	if (p->cmd_num == p->argc - 4) //the last process
 	{
@@ -75,6 +78,8 @@ static void	child(t_pipex *p)
 			//close_fds(fd_in, p->fd[1], p);
 			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
 		}
+		close(p->fd[1]);
+		close(p->cur_fd);
 		//printf("cmd: %d: fd_out will close after dup2: %d\n", p->cmd_num, fd_out);
 	}
 	else  //all except the last
@@ -83,14 +88,15 @@ static void	child(t_pipex *p)
 		//ft_printf(2, "cmd: %d: fd_out turned into fd1: %d\n", p->cmd_num, fd_out);
 		if (dup2(p->fd[1], STDOUT_FILENO) == -1)
 			error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
+		close(p->fd[1]);
 	}
 
 	//printf("cmd: %d: fd0 will close before exec: %d\n", p->cmd_num, p->fd[0]);
-	
+	//ft_printf(1, "%s[%d] fd[0] = %d\n", p->argv[p->cmd_num + 2], p->cmd_num, p->fd[0]);
 	//fflush(stdout);
 	if (close(p->fd[0]) == -1)
 		error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
-
+	//ft_printf(1, "%s[%d] fd[0] = %d\n", p->argv[p->cmd_num + 2], p->cmd_num, p->fd[0]);
 	handle_command(p->argv[p->cmd_num + 2], p);
 	exit(EXIT_SUCCESS);
 }
@@ -131,6 +137,7 @@ void	pipex(t_pipex *p)
 int	waiting(t_pipex *p)
 {
 	int	status;
+	int	exit_code;
 	int	pid_counter;
 
 	//p->cmd_num = 0;
@@ -139,9 +146,12 @@ int	waiting(t_pipex *p)
 	while (pid_counter < p->cmd_num)
 	{
 		//printf("pid_counter: %d, p->pids[pid_counter]: %d\n", pid_counter, p->pids[pid_counter]);
-		if (waitpid(p->pids[pid_counter], &status, 0) == -1)
-			error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
+		// if (waitpid(p->pids[pid_counter], &status, 0) == -1)
+		// 	error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
+		if (wait(&status) == p->pids[p->cmd_num - 1])
+			exit_code = status;
 		pid_counter++;
 	}
-	return ((status >> 8) & 255);
+	//return ((status >> 8) & 255);
+	return ((exit_code >> 8) & 255);
 }
