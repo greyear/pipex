@@ -45,16 +45,19 @@ void	cmd_error(char *reason, char *cmd, int exit_code, t_pipex **p)
 		perror("write error");
 		exit(EXIT_FAILURE);
 	}
-	clean_struct(p);
+	clean_struct(p); //move this to be the 1st instruction
 	//close_fds((*p)->cur_fd, (*p)->fd[1], *p);
 	exit(exit_code);
 }
 
 void	file_error(char *reason, char *file, int exit_code, t_pipex **p) // **?
 {
-	if (p)
-		ft_printf(2, "%s %s", reason, file);
-	//clean_struct(p);
+	if (ft_printf(2, "%s %s", reason, file) == -1)
+	{
+		perror("write error");
+		exit(EXIT_FAILURE);
+	}
+	clean_struct(p);
 	exit(exit_code);
 }
 

@@ -24,9 +24,11 @@ static int	open_infile(t_pipex *p)
 {
 	int	fd_in;
 
+	check_first_file(p);
 	fd_in = open(p->argv[1], O_RDONLY);
 	if (fd_in < 0)
 	{
+		ft_printf(2, "cmd: %d: SHOULD BE PERM DENIED ISSUE\n", p->cmd_num);
 		close_fds(p->fd[0], p->fd[1], p);
 		error_clean_exit_code(ERR_OPEN, EXIT_FAILURE, &p); //error?
 	}
@@ -37,7 +39,7 @@ static int	open_outfile(t_pipex *p)
 {
 	int fd_out;
 
-	//check_second_file(p);
+	check_second_file(p);
 	fd_out = open(p->argv[p->argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd_out < 0)
 	{
