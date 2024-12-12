@@ -31,6 +31,7 @@ void	execve_fail(char *path, char **cmd_split, t_pipex **p)
 		perror("write error");
 		exit(EXIT_FAILURE);
 	}
+	//perror(cmd_split[0]);
 	free(path);
 	path = NULL; //check if I need it
 	//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
