@@ -121,18 +121,75 @@ int	waiting(t_pipex *p)
 	int	status;
 	int	exit_code;
 	int	pid_counter;
+	//int	signal;
 
 	pipex(p);
 	pid_counter = 0;
 	while (pid_counter < p->cmd_num)
 	{
 		//printf("pid_counter: %d, p->pids[pid_counter]: %d\n", pid_counter, p->pids[pid_counter]);
-		// if (waitpid(p->pids[pid_counter], &status, 0) == -1)
-		// 	error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
-		if (wait(&status) == p->pids[p->cmd_num - 1])
+		//if (waitpid(p->pids[pid_counter], &status, 0) == -1)
+		//	error_clean_exit_code(ERR_WAITPID, EXIT_FAILURE, &p);
+		if (wait(&status) == p->pids[p->cmd_num - 1])// && WIFEXITED(status))
+		{
+			//if (WIFSIGNALED(status))
+			//{
+			//	signal = WTERMSIG(status);
+			//	return (128 + signal);
+			//}
+			if (WIFSIGNALED(status))
+			{
+				printf("SIGNAL: pid_counter: %d, p->pids[pid_counter]: %d\n", pid_counter, p->pids[pid_counter]);
+				// Handle process termination due to signals (e.g., segmentation fault)
+				//int signal = WTERMSIG(status);
+				//exit_code = 128 + signal;  // Standard exit code for signal termination
+			}
 			exit_code = status;
+		}
 		pid_counter++;
 	}
 	//return ((status >> 8) & 255);
 	return ((exit_code >> 8) & 255);
 }
+/*
+int waiting(t_pipex *p)
+{
+    int status;
+    int exit_code = 0;
+    int pid_counter = 0;
+
+    // Call pipex to set up pipes and fork processes
+    pipex(p);
+
+    // Wait for all child processes
+    while (pid_counter < p->cmd_num)
+    {
+        if (waitpid(p->pids[pid_counter], &status, 0) == -1)
+        {
+            perror("waitpid failed");
+            clean_struct(&p);  // Ensure cleanup in case of error
+            exit(EXIT_FAILURE); // Exit if waitpid fails
+        }
+
+        if (WIFEXITED(status))
+        {
+            // Capture the exit status of the last process
+            if (pid_counter == p->cmd_num - 1)
+                exit_code = WEXITSTATUS(status);
+        }
+        else if (WIFSIGNALED(status))
+        {
+            // Handle process termination due to signals (e.g., segmentation fault)
+            int signal = WTERMSIG(status);
+            exit_code = 128 + signal;  // Standard exit code for signal termination
+        }
+
+        pid_counter++;
+    }
+
+    // Clean up after all processes are done
+    clean_struct(&p);
+
+    return exit_code; // Return the exit code of the last process
+}*/
+
