@@ -14,34 +14,20 @@
 
 void	handle_command(char *cmd, t_pipex *p)
 {
-	//char	**cmd_split;
 	char	*path;
 
 	p->cmds = split_cmd(cmd);
 	if (!p->cmds)
-	{
-		//ft_printf(2, "CMD BROKE:>%s<\n", cmd);
-		//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 		cmd_error(CMD_NOT_FOUND, cmd, EXIT_CMD_NOT_FOUND, &p); //The error msg in real bash looks different, it says about the previous one
-		return ; //clean?
-	}
 	path = find_path(p->cmds, p);
-	//ft_printf(2, "PATH---->%s<--- \n", path);
 	if (!path)
-	{
-		//ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
-		//ft_printf(2, "cmd %d: CLOSE WHICH CAUSES PROBLEMS: cur_fd: %d and fd1: %d\n", p->cmd_num, p->cur_fd, p->fd[1]);
-		//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 		cmd_error(CMD_NOT_FOUND, p->cmds[0], EXIT_CMD_NOT_FOUND, &p);
-	}
 	execve(path, p->cmds, p->envp);
-	//ft_printf(2, "EXECVE FAILED with path---->%s<--- \n", path);
-	//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
-	execve_fail(path, p->cmds, &p); //check msg
+	execve_fail(path, p->cmds, &p);
 }
 
-//if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1) - "Permission denied".
 //if (ppx->cmd_args[0] && ft_strncmp(ppx->cmd_args[0], "exit", 4) == 0) - exit(ft_atoi(ppx->cmd_args[1]));
+//is a directory
 
 char	**path_from_envp(t_pipex *p)
 {
@@ -52,10 +38,8 @@ char	**path_from_envp(t_pipex *p)
 	i = 0;
 	while (p->envp[i])
 	{
-		if (ft_strncmp(p->envp[i], "PATH=", 5) == 0)
-		{
+		if (ft_strncmp(p->envp[i], "PATH=", 5) == 0) //strcmp if empty argument?
 			return (ft_split(p->envp[i] + 5, ':'));
-		}
 		i++;
 	}
 	return (NULL);
@@ -94,18 +78,11 @@ char	*find_path(char **cmd_split, t_pipex *p)
 			return (ft_strdup(cmd_split[0]));
 		}
 		else
-		{
-			//ft_printf(2, "ACCESS IS NOT 0:>%s<\n", cmd_split[0]);
-			//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 			cmd_error(NO_FILE_DIR, cmd_split[0], EXIT_CMD_NOT_FOUND, &p);
-		}
 	}
 	path = path_from_envp(p);
 	if (!path)
-	{
-		//ft_printf(2, "PATH FROM ENVP BROKE:>%s<\n", cmd_split[0]);
 		return (NULL); //clean?
-	}
 	i = 0;
 	while (path[i])
 	{
@@ -117,8 +94,6 @@ char	*find_path(char **cmd_split, t_pipex *p)
 		}
 		if (access(res, F_OK) == 0)
 		{
-			//ft_printf(2, "ACCESS---->%s<--- \n", res);
-			//ft_printf(2, "PATH---->%s<--- \n", path[0]);
 			clean_arr(&path);
 			return (res);
 		}	
@@ -149,3 +124,13 @@ char	*find_path(char **cmd_split, t_pipex *p)
 
 В итоге вызвали execve с аргументами: итоговый путь, разделенная команда как массив строк, envp 
 */
+
+//ft_printf(2, "CMD BROKE:>%s<\n", cmd);
+//ft_printf(2, "PATH---->%s<--- \n", path);
+//ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
+//ft_printf(2, "cmd %d: CLOSE WHICH CAUSES PROBLEMS: cur_fd: %d and fd1: %d\n", p->cmd_num, p->cur_fd, p->fd[1]);
+//ft_printf(2, "ACCESS IS NOT 0:>%s<\n", cmd_split[0]);
+//ft_printf(2, "EXECVE FAILED with path---->%s<--- \n", path);
+//ft_printf(2, "PATH FROM ENVP BROKE:>%s<\n", cmd_split[0]);
+//ft_printf(2, "ACCESS---->%s<--- \n", res);
+//ft_printf(2, "PATH---->%s<--- \n", path[0]);

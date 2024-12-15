@@ -24,12 +24,10 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-# define ERR_WRITE "write function failed"
 # define ERR_MALLOC "memory allocation failed"
 # define ERR_FORK "fork function failed"
 # define ERR_PIPE "pipe creation failed"
 # define ERR_DUP2 "dup2 function failed"
-# define ERR_WAITPID "waitpid function failed"
 # define ERR_EXECVE "execve failed"
 # define ERR_OPEN "opening failed" //do I need to specify?
 # define ERR_CLOSE "closing failed"

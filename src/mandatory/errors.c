@@ -26,15 +26,9 @@ void	args_number_error(void)
 
 void	execve_fail(char *path, char **cmd_split, t_pipex **p)
 {
-	if (ft_printf(2, "%s %s\n", ERR_EXECVE, cmd_split[0]) == -1)
-	{
-		perror("write error");
-		exit(EXIT_FAILURE);
-	}
-	//perror(cmd_split[0]);
+	perror(cmd_split[0]);
 	free(path);
 	path = NULL; //check if I need it
-	//close_fds(p->cur_fd, p->fd[1], p); //Can I put it inside cmd_error function?
 	clean_struct(p);
 	exit(EXIT_CMD_CANNOT_EXECUTE); //or 127?
 }
