@@ -16,13 +16,11 @@ void	args_number_error(void)
 {
 	if (ft_putstr_fd("Invalid number of arguments\n", 2) == -1)
 	{
-		perror("write error");//specify?
+		perror("write error");
 		exit(EXIT_FAILURE);
 	}
 	exit(EXIT_FAILURE);
 }
-
-//do we need to write pipex in error messages?
 
 void	execve_fail(char *path, char **cmd_split, t_pipex **p)
 {
@@ -40,19 +38,18 @@ void	cmd_error(char *reason, char *cmd, int exit_code, t_pipex **p)
 		perror("write error");
 		exit(EXIT_FAILURE);
 	}
-	clean_struct(p); //move this to be the 1st instruction
-	//close_fds((*p)->cur_fd, (*p)->fd[1], *p);
+	clean_struct(p);
 	exit(exit_code);
 }
 
-void	file_error(char *reason, char *file, int exit_code, t_pipex **p) // **?
+void	file_error(char *reason, char *file, int exit_code, t_pipex **p)
 {
+	clean_struct(p);
 	if (ft_printf(2, "%s %s", reason, file) == -1)
 	{
 		perror("write error");
 		exit(EXIT_FAILURE);
 	}
-	clean_struct(p);
 	exit(exit_code);
 }
 
@@ -66,28 +63,15 @@ void	missing_quote_error(char quote)
 	exit(EXIT_FAILURE);
 }
 
-void	error_code(char *reason)
-{
-	if (ft_putstr_fd(reason, 2) == -1)
-	{
-		perror("write error");
-		exit(EXIT_FAILURE);
-	}
-}
-
 void	error_exit_code(char *reason, int exit_code)
 {
-	if (ft_putstr_fd(reason, 2) == -1)
-	{
-		perror("write error");
-		exit(EXIT_FAILURE);
-	}
+	perror(reason);
 	exit(exit_code);
 }
 
-void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p) //do I rly need ** everywhere?
+void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p)
 {
 	clean_struct(p);
-	perror(reason); //why perror here and fd_putstr_fd there?
+	perror(reason);
 	exit(exit_code);
 }

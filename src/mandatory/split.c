@@ -12,8 +12,6 @@
 
 #include "pipex.h"
 
-//check the case with "\\ \\ \\ \\ ".
-//Mine gives 1, chatgpt thinks it should be 4
 static int	count_words(char *str)
 {
 	int	i;
@@ -49,10 +47,9 @@ static char	*one_word(char *str, int len)
 
 	word = (char *)ft_calloc((len + 1), sizeof(char));
 	if (!word)
-		return (NULL); //what else
+		return (NULL);
 	i = 0;
 	j = 0;
-	//what about $ symbol and ` symbol?
 	while (i < len)
 	{
 		if (ft_isquote(str[0]) && str[i] == str[0])
@@ -75,8 +72,8 @@ static char	**all_words(char *str, int count)
 	array = (char **)ft_calloc((count + 1), sizeof(char *));
 	if (!array)
 		return (NULL);
-	w = 0;
-	while (*str && w < count)
+	w = -1;
+	while (*str && ++w < count)
 	{
 		if (*str == ' ')
 			str++;
@@ -91,7 +88,6 @@ static char	**all_words(char *str, int count)
 			return (NULL);
 		}
 		str += len;
-		w++;
 	}
 	return (array);
 }

@@ -18,27 +18,24 @@ void	handle_command(char *cmd, t_pipex *p)
 
 	p->cmds = split_cmd(cmd);
 	if (!p->cmds)
-		cmd_error(CMD_NOT_FOUND, cmd, EXIT_CMD_NOT_FOUND, &p); //The error msg in real bash looks different, it says about the previous one
+		cmd_error(CMD_NOT_FOUND, cmd, EXIT_CMD_NOT_FOUND, &p);
 	path = find_path(p->cmds, p);
 	if (!path)
 		cmd_error(CMD_NOT_FOUND, p->cmds[0], EXIT_CMD_NOT_FOUND, &p);
 	execve(path, p->cmds, p->envp);
-	execve_fail(path, p->cmds, &p);
+	execve_fail(path, p->cmds, &p); //will it rly free path?
 }
-
-//if (ppx->cmd_args[0] && ft_strncmp(ppx->cmd_args[0], "exit", 4) == 0) - exit(ft_atoi(ppx->cmd_args[1]));
-//is a directory
 
 char	**path_from_envp(t_pipex *p)
 {
 	int	i;
 
 	if (!p->envp)
-		return (0); //should I throw an error here?
+		return (NULL);
 	i = 0;
 	while (p->envp[i])
 	{
-		if (ft_strncmp(p->envp[i], "PATH=", 5) == 0) //strcmp if empty argument?
+		if (ft_strncmp(p->envp[i], "PATH=", 5) == 0)
 			return (ft_split(p->envp[i] + 5, ':'));
 		i++;
 	}
@@ -82,7 +79,7 @@ char	*find_path(char **cmd_split, t_pipex *p)
 	}
 	path = path_from_envp(p);
 	if (!path)
-		return (NULL); //clean?
+		return (NULL);
 	i = 0;
 	while (path[i])
 	{
@@ -103,34 +100,3 @@ char	*find_path(char **cmd_split, t_pipex *p)
 	clean_arr(&path);
 	return (NULL);
 }
-
-/*
-Взяли команду как строку, разделили ее по словам, сделали массив: "ls -l /home" становится ["ls", "-l", "/home"].
-Проверили, есть ли в этом массиве / (путь )
-Если есть: 
-	проверили, исполняется ли команда сама по себе - если да, вернули ее, если нет, выбросили ошибку, так как команда содержит путь, но некорректный
-
-Поискали, есть ли среди envp PATH=, если есть - вернули сплит массив путей, разделенных :, например, ["/usr/local/bin", "/usr/bin", "/bin"].
-									если нет - выбросили ошибку
-Собрали весь путь таким образом для каждого пути: части пути, соединенные через / плюс сама команда.
-Получили несколько вариантов
-/usr/bin/ls
-/bin/ls
-Для каждой такой сборки поочередно проверили, исполняемая ли она
-Если да:
-	вернули результат сборки
-Если нет: ошибка
-Всё освободили
-
-В итоге вызвали execve с аргументами: итоговый путь, разделенная команда как массив строк, envp 
-*/
-
-//ft_printf(2, "CMD BROKE:>%s<\n", cmd);
-//ft_printf(2, "PATH---->%s<--- \n", path);
-//ft_printf(2, "PATH FROM FIND_PATH BROKE:>%s<\n", cmd);
-//ft_printf(2, "cmd %d: CLOSE WHICH CAUSES PROBLEMS: cur_fd: %d and fd1: %d\n", p->cmd_num, p->cur_fd, p->fd[1]);
-//ft_printf(2, "ACCESS IS NOT 0:>%s<\n", cmd_split[0]);
-//ft_printf(2, "EXECVE FAILED with path---->%s<--- \n", path);
-//ft_printf(2, "PATH FROM ENVP BROKE:>%s<\n", cmd_split[0]);
-//ft_printf(2, "ACCESS---->%s<--- \n", res);
-//ft_printf(2, "PATH---->%s<--- \n", path[0]);

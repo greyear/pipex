@@ -35,7 +35,7 @@ int	main(int argc, char *argv[], char *envp[])
 	p->argv = argv;
 	p->envp = envp;
 	init_p(p);
-	p->pids = (pid_t *)malloc((p->argc - 3) * sizeof(pid_t)); //calloc?
+	p->pids = (pid_t *)malloc((p->argc - 3) * sizeof(pid_t));
 	if (!p->pids)
 		error_clean_exit_code(ERR_MALLOC, EXIT_FAILURE, &p);
 	status = waiting(p);

@@ -12,26 +12,12 @@
 
 #include "pipex.h"
 
-void	close_fds(int fd1, int fd2, t_pipex *p)
+void	close_fds(int fd1, int fd2)
 {
 	if (fd1 != -1)
-	{
-		if (close(fd1) == -1)
-		{
-			//printf("TO CLOSE---->fd1: %d<--- \n", fd1);
-			fflush(stdout);
-			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
-		}
-	}
+		close(fd1);
 	if (fd2 != -1)
-	{
-		if (close(fd2) == -1)
-		{
-			//printf("TO CLOSE---->fd2: %d<--- in cmd %d\n",fd2, p->cmd_num);
-			fflush(stdout);
-			error_clean_exit_code(ERR_CLOSE, EXIT_FAILURE, &p);
-		}
-	}
+		close(fd2);
 }
 
 int	length_inside_quotes(char *str)

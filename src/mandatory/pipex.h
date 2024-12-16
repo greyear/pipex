@@ -63,7 +63,7 @@ char	**split_cmd(char *cmd);
 void	handle_command(char *cmd, t_pipex *p);
 
 //Utils
-void	close_fds(int fd1, int fd2, t_pipex *p);
+void	close_fds(int fd1, int fd2);
 int		length_inside_quotes(char *str);
 int		word_length(char *str);
 
@@ -73,7 +73,6 @@ void	execve_fail(char *path, char **cmd_split, t_pipex **p);
 void	cmd_error(char *reason, char *cmd, int exit_code, t_pipex **p);
 void	file_error(char *reason, char *file, int exit_code, t_pipex **p);
 void	missing_quote_error(char quote);
-void	error_code(char *reason);
 void	error_exit_code(char *reason, int exit_code);
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p);
 
@@ -84,8 +83,5 @@ void	check_second_file(t_pipex *p);
 //Cleaners
 void	clean_arr(char ***arr);
 void	clean_struct(t_pipex **p);
-
-//Utils
-void	close_fds(int fd1, int fd2, t_pipex *p);
 
 #endif
