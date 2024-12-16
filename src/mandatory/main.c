@@ -14,13 +14,6 @@
 #include <time.h>
 #include <string.h>
 
-void	init_p(t_pipex	*p)
-{
-	p->cmds = NULL;
-	p->cmd_num = 0;
-	p->cur_fd = -1;
-}
-
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_pipex	*p;

@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-static int	count_words(char *str)
+static int	count_words(char *str, t_pipex *p)
 {
 	int	i;
 	int	res;
@@ -26,7 +26,7 @@ static int	count_words(char *str)
 		if (str[i] == '\'' || str[i] == '\"')
 		{
 			res++;
-			i += length_inside_quotes(&str[i]) + 2;
+			i += length_inside_quotes(&str[i], p) + 2;
 		}
 		else if (str[i] != ' ')
 		{
@@ -63,7 +63,7 @@ static char	*one_word(char *str, int len)
 	return (word);
 }
 
-static char	**all_words(char *str, int count)
+static char	**all_words(char *str, int count, t_pipex *p)
 {
 	int		w;
 	int		len;
@@ -78,7 +78,7 @@ static char	**all_words(char *str, int count)
 		if (*str == ' ')
 			str++;
 		if (ft_isquote(*str))
-			len = length_inside_quotes(str) + 2;
+			len = length_inside_quotes(str, p) + 2;
 		else
 			len = word_length(str);
 		array[w] = one_word(str, len);
@@ -92,17 +92,17 @@ static char	**all_words(char *str, int count)
 	return (array);
 }
 
-char	**split_cmd(char *cmd)
+char	**split_cmd(char *cmd, t_pipex *p)
 {
 	char	**res;
 	int		count;
 
 	if (!cmd || *cmd == '\0')
 		return (NULL);
-	count = count_words(cmd);
+	count = count_words(cmd, p);
 	if (count == 0)
 		return (NULL);
-	res = all_words(cmd, count);
+	res = all_words(cmd, count, p);
 	if (!res)
 		return (NULL);
 	return (res);

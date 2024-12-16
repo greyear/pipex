@@ -13,7 +13,6 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
-//check if needed?
 # include "../../libft/include/libft.h"
 # include "../../libft/include/ft_printf.h"
 # include "../../libft/include/get_next_line.h"
@@ -29,15 +28,15 @@
 # define ERR_PIPE "pipe creation failed"
 # define ERR_DUP2 "dup2 function failed"
 # define ERR_EXECVE "execve failed"
-# define ERR_OPEN "opening failed" //do I need to specify?
+# define ERR_OPEN "opening failed"
 # define ERR_CLOSE "closing failed"
 # define NO_FILE_DIR "no such file or directory"
 # define ZSH_NO_FILE "zsh: no such file or directory:"
 # define CMD_NOT_FOUND "zsh: command not found:"
 # define PERM_DENIED "zsh: permission denied:"
 
-# define EXIT_CMD_CANNOT_EXECUTE 126
-# define EXIT_CMD_NOT_FOUND 127
+# define CMD_EXEC 126
+# define CMD_NF 127
 
 typedef struct s_pipex
 {
@@ -59,20 +58,19 @@ void	init_p(t_pipex	*p);
 int		waiting(t_pipex *p);
 char	**path_from_envp(t_pipex *p);
 char	*find_path(char **cmd_split, t_pipex *p);
-char	**split_cmd(char *cmd);
+char	**split_cmd(char *cmd, t_pipex *p);
 void	handle_command(char *cmd, t_pipex *p);
 
 //Utils
 void	close_fds(int fd1, int fd2);
-int		length_inside_quotes(char *str);
+int		length_inside_quotes(char *str, t_pipex *p);
 int		word_length(char *str);
 
 //Errors
 void	args_number_error(void);
-void	execve_fail(char *path, char **cmd_split, t_pipex **p);
+void	execve_fail(char **path, char **cmd_split, t_pipex **p);
 void	cmd_error(char *reason, char *cmd, int exit_code, t_pipex **p);
-void	file_error(char *reason, char *file, int exit_code, t_pipex **p);
-void	missing_quote_error(char quote);
+void	missing_quote_error(char quote, t_pipex **p);
 void	error_exit_code(char *reason, int exit_code);
 void	error_clean_exit_code(char *reason, int exit_code, t_pipex **p);
 

@@ -12,23 +12,13 @@
 
 #include "pipex.h"
 
-void	args_number_error(void)
-{
-	if (ft_putstr_fd("Invalid number of arguments\n", 2) == -1)
-	{
-		perror("write error");
-		exit(EXIT_FAILURE);
-	}
-	exit(EXIT_FAILURE);
-}
-
-void	execve_fail(char *path, char **cmd_split, t_pipex **p)
+void	execve_fail(char **path, char **cmd_split, t_pipex **p)
 {
 	perror(cmd_split[0]);
-	free(path);
-	path = NULL; //check if I need it
+	free(*path);
+	*path = NULL;
 	clean_struct(p);
-	exit(EXIT_CMD_CANNOT_EXECUTE); //or 127?
+	exit(CMD_EXEC);
 }
 
 void	cmd_error(char *reason, char *cmd, int exit_code, t_pipex **p)
@@ -42,24 +32,14 @@ void	cmd_error(char *reason, char *cmd, int exit_code, t_pipex **p)
 	exit(exit_code);
 }
 
-void	file_error(char *reason, char *file, int exit_code, t_pipex **p)
-{
-	clean_struct(p);
-	if (ft_printf(2, "%s %s", reason, file) == -1)
-	{
-		perror("write error");
-		exit(EXIT_FAILURE);
-	}
-	exit(exit_code);
-}
-
-void	missing_quote_error(char quote)
+void	missing_quote_error(char quote, t_pipex **p)
 {
 	if (ft_printf(2, "Pipex: missing quote: %c\n", quote) == -1)
 	{
 		perror("write error");
 		exit(EXIT_FAILURE);
 	}
+	clean_struct(p);
 	exit(EXIT_FAILURE);
 }
 

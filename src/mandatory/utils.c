@@ -12,6 +12,13 @@
 
 #include "pipex.h"
 
+void	init_p(t_pipex	*p)
+{
+	p->cmds = NULL;
+	p->cmd_num = 0;
+	p->cur_fd = -1;
+}
+
 void	close_fds(int fd1, int fd2)
 {
 	if (fd1 != -1)
@@ -20,7 +27,7 @@ void	close_fds(int fd1, int fd2)
 		close(fd2);
 }
 
-int	length_inside_quotes(char *str)
+int	length_inside_quotes(char *str, t_pipex *p)
 {
 	char	any_quote;
 	int		len;
@@ -36,7 +43,7 @@ int	length_inside_quotes(char *str)
 		str++;
 	}
 	if (*str != any_quote)
-		missing_quote_error(any_quote);
+		missing_quote_error(any_quote, &p);
 	return (len);
 }
 
@@ -59,4 +66,14 @@ int	word_length(char *str)
 		}
 	}
 	return (len);
+}
+
+void	args_number_error(void)
+{
+	if (ft_putstr_fd("Invalid number of arguments\n", 2) == -1)
+	{
+		perror("write error");
+		exit(EXIT_FAILURE);
+	}
+	exit(EXIT_FAILURE);
 }
