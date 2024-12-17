@@ -27,7 +27,6 @@
 # define ERR_FORK "fork function failed"
 # define ERR_PIPE "pipe creation failed"
 # define ERR_DUP2 "dup2 function failed"
-# define ERR_EXECVE "execve failed"
 # define ERR_OPEN "opening failed"
 # define ERR_CLOSE "closing failed"
 # define NO_FILE_DIR "no such file or directory"
@@ -48,8 +47,6 @@ typedef struct s_pipex
 	int		cmd_num;
 	int		fd[2];
 	int		cur_fd;
-	int		is_path;
-	char	*path;
 }	t_pipex;
 
 //Main

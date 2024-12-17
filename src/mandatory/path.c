@@ -59,47 +59,6 @@ static char	*make_full_path(char *one_path, char *cmd)
 	free(premade);
 	return (made);
 }
-/*
-char	*find_path(char **cmd_split, t_pipex *p)
-{
-	char	*res;
-	char	**path;
-	int		i;
-
-	if (ft_strchr(cmd_split[0], '/') != NULL)
-	{
-		if (access(cmd_split[0], F_OK) == 0)
-		{
-			if (access(cmd_split[0], X_OK) == -1)
-				cmd_error(PERM_DENIED, cmd_split[0], CMD_EXEC, &p);
-			return (ft_strdup(cmd_split[0]));
-		}
-		else
-			cmd_error(NO_FILE_DIR, cmd_split[0], CMD_NF, &p);
-	}
-	path = path_from_envp(p);
-	if (!path)
-		return (NULL);
-	i = 0;
-	while (path[i])
-	{
-		res = make_full_path(path[i], cmd_split[0]);
-		if (!res)
-		{
-			clean_arr(&path);
-			error_clean_exit_code(ERR_MALLOC, EXIT_FAILURE, &p);
-		}
-		if (access(res, F_OK) == 0)
-		{
-			clean_arr(&path);
-			return (res);
-		}	
-		free(res);
-		i++;
-	}
-	clean_arr(&path);
-	return (NULL);
-}*/
 
 static char	*combining(char **cmd_split, t_pipex *p)
 {
