@@ -26,7 +26,7 @@ static int	count_words(char *str, t_pipex *p)
 		if (str[i] == '\'' || str[i] == '\"')
 		{
 			res++;
-			i += length_inside_quotes(&str[i], p) + 2;
+			i += length_inside_quotes(&str[i], p, str) + 2;
 		}
 		else if (str[i] != ' ')
 		{
@@ -78,7 +78,7 @@ static char	**all_words(char *str, int count, t_pipex *p)
 		if (*str == ' ')
 			str++;
 		if (ft_isquote(*str))
-			len = length_inside_quotes(str, p) + 2;
+			len = length_inside_quotes(str, p, str) + 2;
 		else
 			len = word_length(str);
 		array[w] = one_word(str, len);

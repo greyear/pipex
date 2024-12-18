@@ -16,6 +16,7 @@ void	handle_command(char *cmd, t_pipex *p)
 {
 	char	*path;
 
+	//ft_printf(2, "CMD: %s\n", cmd);
 	p->cmds = split_cmd(cmd, p);
 	if (!p->cmds)
 		cmd_error(CMD_NOT_FOUND, cmd, CMD_NF, &p);
@@ -82,7 +83,7 @@ static char	*combining(char **cmd_split, t_pipex *p)
 		{
 			clean_arr(&path);
 			return (res);
-		}	
+		}
 		free(res);
 	}
 	clean_arr(&path);

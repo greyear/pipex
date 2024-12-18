@@ -27,7 +27,7 @@ void	close_fds(int fd1, int fd2)
 		close(fd2);
 }
 
-int	length_inside_quotes(char *str, t_pipex *p)
+int	length_inside_quotes(char *str, t_pipex *p, char *cmd)
 {
 	char	any_quote;
 	int		len;
@@ -43,7 +43,7 @@ int	length_inside_quotes(char *str, t_pipex *p)
 		str++;
 	}
 	if (*str != any_quote)
-		missing_quote_error(any_quote, &p);
+		cmd_error(CMD_NOT_FOUND, cmd, CMD_NF, &p);
 	return (len);
 }
 

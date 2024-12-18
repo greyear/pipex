@@ -35,11 +35,3 @@ int	main(int argc, char *argv[], char *envp[])
 	clean_struct(&p);
 	return (status);
 }
-
-// ft_printf(2, "argc: %d\n", argc);
-/*for (int i = 0; i < argc; i++)
-	printf("argv[%d]: %s\n", i, argv[i]);*/
-/*for (int i = 0; p->envp[i]; i++)
-	ft_printf(2, "envp[%d]: %s\n", i, p->envp[i]);*/
-// ft_putstr_fd("test main\n", 2);
-//printf("Allocated p->pids for %d processes\n", p->argc - 3); //delete
