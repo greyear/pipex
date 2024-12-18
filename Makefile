@@ -78,13 +78,14 @@ $(NAME):			.mandatory
 					@$(CC) $(CFLAGS) $(MAN_OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME)
 					@touch $@
 					@echo "$(GREEN)--> Created pipex!$(NC)"
-# @$(RM) -r .bonus - should I delete it here?
+					@$(RM) -r .bonus
 
 bonus:				.bonus
-					@echo "$(GREEN)--> Created pipex_bonus!$(NC)"
 
 .bonus:				$(BON_OBJ) $(LIBFT)
 					@$(CC) $(CFLAGS) $(BON_OBJ) $(LIBFT) $(HEADERS) $(LIB) -o $(NAME)
+					@touch $@
+					@echo "$(GREEN)--> Created pipex_bonus!$(NC)"
 					@$(RM) -r .mandatory
 
 # Object file compilation

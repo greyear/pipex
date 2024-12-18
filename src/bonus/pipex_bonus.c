@@ -34,7 +34,7 @@ static void	child(t_pipex *p)
 	{
 		if (dup2(p->fd[1], STDOUT_FILENO) == -1)
 			error_clean_exit_code(ERR_DUP2, EXIT_FAILURE, &p);
-		close(p->fd[1]);
+		close_fds(p->cur_fd, p->fd[1]);
 	}
 	close(p->fd[0]);
 	handle_command(p->argv[p->cmd_num + 2], p);
