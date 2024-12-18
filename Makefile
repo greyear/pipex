@@ -36,15 +36,22 @@ CFLAGS			=	-g -Wall -Wextra -Werror
 RM				=	rm -f
 
 # Source files
-MAN_SRC			=	main.c \
-					pipex.c \
+MAN_SRC			=	pipex.c \
 					path.c \
 					errors.c \
 					checks.c \
 					cleaners.c \
 					split.c \
+					open.c \
 					utils.c
-BON_SRC			=	main_bonus.c
+BON_SRC			=	pipex_bonus.c \
+					path_bonus.c \
+					errors_bonus.c \
+					checks_bonus.c \
+					cleaners_bonus.c \
+					split_bonus.c \
+					open_bonus.c \
+					utils_bonus.c
 
 # Full paths to files
 MAN_SRC_FILES	=	$(addprefix $(SRC_MAN_DIR)/, $(MAN_SRC))

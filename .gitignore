@@ -1,0 +1,15 @@
+.DS_Store
+*.a
+*.o
+*.out
+*.swp
+*.txt
+.pipex
+.vscode
+tester_pipex.sh
+ppx_err_tester.sh
+42_pipex_tester
+pipex_tester
+obj
+*in*
+*out*

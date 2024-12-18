@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azinchen <azinchen@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 19:14:22 by azinchen          #+#    #+#             */
-/*   Updated: 2024/11/14 19:14:25 by azinchen         ###   ########.fr       */
+/*   Created: 2024/12/18 20:00:53 by azinchen          #+#    #+#             */
+/*   Updated: 2024/12/18 20:00:57 by azinchen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include "../../libft/include/libft.h"
 # include "../../libft/include/ft_printf.h"

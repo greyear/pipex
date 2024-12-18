@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azinchen <azinchen@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 15:12:59 by azinchen          #+#    #+#             */
-/*   Updated: 2024/11/15 15:13:00 by azinchen         ###   ########.fr       */
+/*   Created: 2024/12/18 20:34:56 by azinchen          #+#    #+#             */
+/*   Updated: 2024/12/18 20:35:00 by azinchen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 static void	child(t_pipex *p)
 {
@@ -82,7 +82,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_pipex	*p;
 	int		status;
 
-	if (argc != 5)
+	if (argc < 5)
 		args_number_error();
 	p = (t_pipex *)malloc(sizeof(t_pipex));
 	if (!p)

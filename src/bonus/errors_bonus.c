@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   errors_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azinchen <azinchen@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 18:03:57 by azinchen          #+#    #+#             */
-/*   Updated: 2024/11/14 18:03:59 by azinchen         ###   ########.fr       */
+/*   Created: 2024/12/18 19:56:08 by azinchen          #+#    #+#             */
+/*   Updated: 2024/12/18 19:56:14 by azinchen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 void	execve_fail(char **path, char **cmd_split, t_pipex **p)
 {
